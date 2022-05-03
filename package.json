@@ -5,6 +5,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "tsc -p  .",
+    "build-docker": "docker build .",
     "start": "node ./dist/index.js"
   },
   "devDependencies": {
