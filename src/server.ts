@@ -1,6 +1,6 @@
 import fastify from 'fastify';
-import { IncomingMessage } from 'http';
-import { FileStorage } from './storage';
+import type { IncomingMessage } from 'http';
+import type { FileStorage } from './storage';
 import bearerAuthPlugin from '@fastify/bearer-auth';
 
 export function createServer(config: { token: string; storage: FileStorage }) {
