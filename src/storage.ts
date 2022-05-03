@@ -1,6 +1,6 @@
 import invariant from 'ts-invariant';
 import { join } from 'path';
-import { Readable } from 'stream';
+import type { Readable } from 'stream';
 import { createReadStream, existsSync, promises } from 'fs';
 import { stat, writeFile } from 'fs/promises';
 import { Bucket, Storage } from '@google-cloud/storage';
@@ -53,7 +53,9 @@ export async function checkBucketPermissions(bucket: Bucket): Promise<void> {
 
 export interface FileStorage {
   exists(filename: string): Promise<boolean>;
+
   read(filename: string): Readable;
+
   write(filename: string, body: Readable): Promise<void>;
 }
 
