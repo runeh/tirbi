@@ -52,6 +52,15 @@ async function main() {
   }
 
   const server = await createServer({ token: TOKEN, storage });
+
+  process.on('SIGTERM', async () => {
+    // fixme: does this even work?
+    server.log.info('Got SIGTERM. Shutting down');
+    server.close(() => process.exit());
+    // Just kill everything if not shut down 10 seconds after calling close.
+    setTimeout(() => process.exit(), 10_000);
+  });
+
   await server.listen(PORT, HOST);
 }
 
