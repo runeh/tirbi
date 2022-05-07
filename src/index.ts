@@ -14,6 +14,11 @@ const storage = makeValidator<StorageDef>((raw) => {
       }
 
       return { kind: 'fs', path: url.pathname };
+    } else if (url.protocol === 'memory:') {
+      const rawMaxSize = Number(url.searchParams.get('maxMegabytes'));
+      const maxMegabytes =
+        isNaN(rawMaxSize) || rawMaxSize === 0 ? undefined : rawMaxSize;
+      return { kind: 'memory', maxMegabytes };
     }
   } catch (err) {
     throw err;
