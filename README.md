@@ -1,5 +1,27 @@
 # tirbi
 
+## Getting started
+
+Run tirbi server:
+
+```shell
+yarn tirbi
+```
+
+This starts an in-memory server that allows any authentication token. This is
+meant for testing, and not recommended for production use.
+
+Run a build with turborepo that uses tirbi as cache:
+
+```shell
+yarn turbo run build \
+     --team=not_used --token="anything" --remote-only \
+     --api=http://localhost:8080
+```
+
+The turbo build should be loading and saving cached artifacts to the tirbi
+server.
+
 ## Misc
 
 ### Pretty logs
