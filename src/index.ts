@@ -30,7 +30,10 @@ function loadConfig() {
 
 async function main() {
   const { PORT, TOKEN, HOST, STORAGE_URL } = loadConfig();
-  const server = await createServer({ token: TOKEN, storageDef: STORAGE_URL });
+  const server = await createServer({
+    tokens: [TOKEN],
+    storageDef: STORAGE_URL,
+  });
   await server.listen(PORT, HOST);
 }
 

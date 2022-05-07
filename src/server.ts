@@ -58,14 +58,18 @@ declare module 'fastify' {
 }
 
 export function createServer(config: {
-  token: string;
+  tokens: string[];
   storageDef: StorageDef;
 }) {
   const server = fastify({ logger: true });
-  server.log.info({ ...config, token: '[redacted]' }, `Creating tirbi server`);
+  server.log.info({ ...config, tokens: '[redacted]' }, `Creating tirbi server`);
 
-  const { storageDef, token } = config;
-  server.register(bearerAuthPlugin, { keys: new Set([token]) });
+  const { storageDef, tokens } = config;
+  if (tokens.length) {
+    server.register(bearerAuthPlugin, { keys: new Set(tokens) });
+  } else {
+    server.log.warn('Starting server without token authorization!');
+  }
   server.register(storagePlugin, { storageDef });
 
   server.get<{

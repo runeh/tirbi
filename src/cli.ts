@@ -1,5 +1,5 @@
 import { parseStorageUrl } from './common';
-import type { StorageDef } from './server';
+import { createServer, StorageDef } from './server';
 import { InvalidArgumentError, Option, program } from 'commander';
 
 const defaultHost = '0.0.0.0';
@@ -77,8 +77,9 @@ interface ParseOptions {
 async function main() {
   program.parse();
   // Not really typesafe, but good enough
-  const options: ParseOptions = program.opts();
-  console.log(options);
+  const { token, host, storage, port }: ParseOptions = program.opts();
+  const server = createServer({ storageDef: storage, tokens: token ?? [] });
+  await server.listen(port, host);
 }
 
 main();
