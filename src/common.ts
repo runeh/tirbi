@@ -1,5 +1,8 @@
 import type { StorageDef } from './server';
 
+/**
+ * Guaranteed not to throw!
+ */
 export function parseStorageUrl(raw: string): StorageDef | null {
   try {
     const url = new URL(raw);
