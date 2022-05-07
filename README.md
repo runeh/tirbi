@@ -1,9 +1,18 @@
 # tirbi
 
+## Misc
+
+### Pretty logs
+
+Use [`pino-pretty`](https://github.com/pinojs/pino-pretty):
+
+```shell
+tirbi | pino-pretty
+```
+
 ## To do
 
 - [ ] Hook up env stuff in commander
-- [ ] Allow omitting token to allow everything
 - [ ] Add docs
 - [ ] Rename fileStorage to cacheStorage?
 - [ ] Don't use URIs for storage that isn't URIs?
@@ -11,7 +20,6 @@
 - [ ] Make the other methods on storage allowed to return promises
 - [ ] Throw handling is weird
 - [ ] Use custom errors when throwing?
-- [ ] Allow multiple tokens?
 - [ ] Add non-http logging?
 - [ ] Trace IDs?
 - [ ] Handle the "events" request?
@@ -24,3 +32,5 @@
 - [ ] Pretty output cli option
 - [x] Add some CLI stuff?
 - [x] In-memory storage adapter
+- [x] Allow omitting token to allow everything
+- [x] Allow multiple tokens?
