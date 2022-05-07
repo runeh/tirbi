@@ -44,7 +44,6 @@ tirbi | pino-pretty
 - [ ] Add non-http logging?
 - [ ] Trace IDs?
 - [ ] Handle the "events" request?
-- [ ] Maybe get rid of envalid again? Or pass cli stuff into it?
 - [ ] Check for directory existence / create dir when using fs
 - [ ] Check if promises.stat always succeeds. Use that instead of also exists in
       that case
@@ -56,3 +55,4 @@ tirbi | pino-pretty
 - [x] Allow multiple tokens?
 - [x] Check for permissions when using gcp
 - [x] Hook up env stuff in commander
+- [x] Maybe get rid of envalid again? Or pass cli stuff into it?
