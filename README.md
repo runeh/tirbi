@@ -12,7 +12,6 @@ tirbi | pino-pretty
 
 ## To do
 
-- [ ] Hook up env stuff in commander
 - [ ] Add docs
 - [ ] Rename fileStorage to cacheStorage?
 - [ ] Don't use URIs for storage that isn't URIs?
@@ -24,7 +23,6 @@ tirbi | pino-pretty
 - [ ] Trace IDs?
 - [ ] Handle the "events" request?
 - [ ] Maybe get rid of envalid again? Or pass cli stuff into it?
-- [ ] Check for permissions when using gcp
 - [ ] Check for directory existence / create dir when using fs
 - [ ] Check if promises.stat always succeeds. Use that instead of also exists in
       that case
@@ -34,3 +32,5 @@ tirbi | pino-pretty
 - [x] In-memory storage adapter
 - [x] Allow omitting token to allow everything
 - [x] Allow multiple tokens?
+- [x] Check for permissions when using gcp
+- [x] Hook up env stuff in commander

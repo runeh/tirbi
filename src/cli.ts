@@ -51,18 +51,27 @@ allows any bearer token and stores artifacts in memory.
 
 program
   .name('tirbi')
-  .option('-p, --port <port>', 'Port to listen to', parsePortArg, defaultPort)
-  .option('-h, --host <host>', 'Host to bind to', defaultHost)
   .addOption(
-    new Option('-t, --token <token...>', 'One or more auth tokens').default(
-      undefined,
-      'Accepts any token',
-    ),
+    new Option('-p, --port <port>', 'Port to listen to')
+      .argParser(parsePortArg)
+      .default(defaultPort)
+      .env('PORT'),
+  )
+  .addOption(
+    new Option('-h, --host <host>', 'Host to bind to')
+      .default(defaultHost)
+      .env('HOST'),
+  )
+  .addOption(
+    new Option('-t, --token <token...>', 'One or more auth tokens')
+      .default(undefined, 'Accepts any token')
+      .env('TOKEN'),
   )
   .addOption(
     new Option('-s, --storage <URI>', 'Storage backend')
       .default(defaultStorage, 'in-memory storage')
-      .argParser(parseStorageArg),
+      .argParser(parseStorageArg)
+      .env('STORAGE'),
   )
   .version('1.0.0-beta1', '-v, --version', 'show tirbi version')
   .addHelpText('after', exampleText);
@@ -78,6 +87,7 @@ async function main() {
   program.parse();
   // Not really typesafe, but good enough
   const { token, host, storage, port }: ParseOptions = program.opts();
+  console.log(token);
   const server = createServer({ storageDef: storage, tokens: token ?? [] });
   await server.listen(port, host);
 }
