@@ -8,6 +8,12 @@ import { pipeline } from 'stream/promises';
 import toStream from 'to-readable-stream';
 import getStream from 'get-stream';
 
+export interface FileStorage {
+  exists(filename: string): Promise<boolean>;
+  read(filename: string): Readable | Buffer;
+  write(filename: string, body: Readable | Buffer): Promise<void>;
+}
+
 // https://nodejs.org/en/knowledge/file-system/security/introduction/#preventing-directory-traversal
 function buildPath(root: string, filename: string) {
   invariant(root.endsWith('/'), 'Root path must end with a slash');
@@ -20,7 +26,7 @@ function buildPath(root: string, filename: string) {
  * Verify that the gcp storage client is allowed to create, read, and delete
  * files from the storage bucket
  */
-export async function checkBucketPermissions(bucket: Bucket): Promise<void> {
+export async function checkGcpBucketPermissions(bucket: Bucket): Promise<void> {
   const testFileName = `tirbi-temp-${Math.round(Math.random() * 100000)}`;
   const expectedContents = `Test file contents for ${testFileName}`;
 
@@ -55,17 +61,11 @@ export async function checkBucketPermissions(bucket: Bucket): Promise<void> {
   }
 }
 
-export interface FileStorage {
-  exists(filename: string): Promise<boolean>;
-  read(filename: string): Readable;
-  write(filename: string, body: Readable): Promise<void>;
-}
-
 export async function gcpFileStorage(bucketName: string): Promise<FileStorage> {
   const storage = new Storage();
   const bucket = storage.bucket(bucketName);
 
-  await checkBucketPermissions(bucket);
+  await checkGcpBucketPermissions(bucket);
 
   return {
     async exists(filename) {

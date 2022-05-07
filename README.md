@@ -2,6 +2,7 @@
 
 ## To do
 
+- [ ] Dont's use URIs for storage that isn't URIs?
 - [ ] Add some tests
 - [ ] In-memory storage adapter
 - [ ] Make the other methods on storage allowed to return promises
