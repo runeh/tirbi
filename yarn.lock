@@ -176,6 +176,13 @@ buffer-equal-constant-time@1.0.1:
   resolved "https://registry.yarnpkg.com/buffer-equal-constant-time/-/buffer-equal-constant-time-1.0.1.tgz#f8e71132f7ffe6e01a5c9697a4c6f3e48d5cc819"
   integrity sha1-+OcRMvf/5uAaXJaXpMbz5I1cyBk=
 
+clipanion@^3.2.0-rc.11:
+  version "3.2.0-rc.11"
+  resolved "https://registry.yarnpkg.com/clipanion/-/clipanion-3.2.0-rc.11.tgz#765661c9aeda8ecc14035a61a4b19b361f9a5400"
+  integrity sha512-fugY+N5uPop31VDYhjTc31DwPjCCLx6kmvdlFTf8fztpOxwplopiZr1XSHSA2qNmfpcXlJZKJsXMkxvXmdzK7g==
+  dependencies:
+    typanion "^3.8.0"
+
 compressible@^2.0.12:
   version "2.0.18"
   resolved "https://registry.yarnpkg.com/compressible/-/compressible-2.0.18.tgz#af53cca6b070d4c3c0750fbd77286a6d7cc46fba"
@@ -829,6 +836,11 @@ tslib@^2.1.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
   integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
+
+typanion@^3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/typanion/-/typanion-3.8.0.tgz#e23c93df92e46fbc8c0dab13135bf40f47352bb7"
+  integrity sha512-r9rEMpvF4pnu2DuYuC//ctH7I83bdx+Psvi1GO68w4942OmFiH56+5YS9vsEe2+9ipFPOnBHW0Z2z5/nGz5jTg==
 
 typedarray-to-buffer@^3.1.5:
   version "3.1.5"

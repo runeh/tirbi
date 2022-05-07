@@ -1,30 +1,14 @@
 import { createServer, StorageDef } from './server';
-import { FileStorage, fsFileStorage, gcpFileStorage } from './storage';
-import { cleanEnv, makeValidator, port, str, host } from 'envalid';
-import { URL } from 'url';
+import { cleanEnv, host, makeValidator, port, str } from 'envalid';
+import { parseStorageUrl } from './common';
 
 const storage = makeValidator<StorageDef>((raw) => {
-  try {
-    const url = new URL(raw);
-    if (url.protocol === 'gs:') {
-      return { kind: 'gs', bucket: `${url.host}${url.pathname}` };
-    } else if (url.protocol === 'file:') {
-      if (url.host !== '') {
-        throw new Error('file url should not include hostname');
-      }
-
-      return { kind: 'fs', path: url.pathname };
-    } else if (url.protocol === 'memory:') {
-      const rawMaxSize = Number(url.searchParams.get('maxMegabytes'));
-      const maxMegabytes =
-        isNaN(rawMaxSize) || rawMaxSize === 0 ? undefined : rawMaxSize;
-      return { kind: 'memory', maxMegabytes };
-    }
-  } catch (err) {
-    throw err;
+  const parsed = parseStorageUrl(raw);
+  if (parsed) {
+    return parsed;
+  } else {
+    throw new Error(`Invalid format of storage config: "${raw}"`);
   }
-
-  throw new Error(`Invalid format of storage config: "${raw}"`);
 });
 
 function loadConfig() {
