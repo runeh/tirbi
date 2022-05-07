@@ -1,9 +1,7 @@
-import { createServer } from './server';
+import { createServer, StorageDef } from './server';
 import { FileStorage, fsFileStorage, gcpFileStorage } from './storage';
 import { cleanEnv, makeValidator, port, str, host } from 'envalid';
 import { URL } from 'url';
-
-type StorageDef = { kind: 'gs'; bucket: string } | { kind: 'fs'; path: string };
 
 const storage = makeValidator<StorageDef>((raw) => {
   try {
@@ -43,15 +41,7 @@ function loadConfig() {
 
 async function main() {
   const { PORT, TOKEN, HOST, STORAGE_URL } = loadConfig();
-  let storage: FileStorage;
-
-  if (STORAGE_URL.kind === 'gs') {
-    storage = await gcpFileStorage(STORAGE_URL.bucket);
-  } else {
-    storage = await fsFileStorage(STORAGE_URL.path);
-  }
-
-  const server = await createServer({ token: TOKEN, storage });
+  const server = await createServer({ token: TOKEN, storageDef: STORAGE_URL });
   await server.listen(PORT, HOST);
 }
 
