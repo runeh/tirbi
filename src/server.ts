@@ -17,9 +17,10 @@ const storagePluginCallback: FastifyPluginAsync<{
   let cacheStorage: FileStorage;
 
   if (storageDef.kind === 'gs') {
-    instance.log.info(`Configuring cache storage: ${storageDef}`);
+    instance.log.info(`Setting up GCP cache storage: ${storageDef.bucket}`);
     cacheStorage = await gcpFileStorage(storageDef.bucket);
   } else {
+    instance.log.info(`Setting up file cache storage: ${storageDef.path}`);
     cacheStorage = await fsFileStorage(storageDef.path);
   }
 
@@ -39,8 +40,9 @@ export function createServer(config: {
   storageDef: StorageDef;
 }) {
   const server = fastify({ logger: true });
-  const { storageDef, token } = config;
+  server.log.info({ ...config, token: '[redacted]' }, `Creating tirbi server`);
 
+  const { storageDef, token } = config;
   server.register(bearerAuthPlugin, { keys: new Set([token]) });
   server.register(storagePlugin, { storageDef });
 

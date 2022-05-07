@@ -16,6 +16,10 @@ function buildPath(root: string, filename: string) {
   return full;
 }
 
+/**
+ * Verify that the gcp storage client is allowed to create, read, and delete
+ * files from the storage bucket
+ */
 export async function checkBucketPermissions(bucket: Bucket): Promise<void> {
   const testFileName = `tirbi-temp-${Math.round(Math.random() * 100000)}`;
   const expectedContents = `Test file contents for ${testFileName}`;
@@ -47,15 +51,13 @@ export async function checkBucketPermissions(bucket: Bucket): Promise<void> {
 
   const [existsAfterDelete] = await testFile.exists();
   if (existsAfterDelete) {
-    throw new Error('File should notexist');
+    throw new Error('Was not able to delete');
   }
 }
 
 export interface FileStorage {
   exists(filename: string): Promise<boolean>;
-
   read(filename: string): Readable;
-
   write(filename: string, body: Readable): Promise<void>;
 }
 
