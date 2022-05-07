@@ -1,12 +1,13 @@
 import invariant from 'ts-invariant';
 import { join } from 'path';
 import type { Readable } from 'stream';
-import { createReadStream, existsSync, promises } from 'fs';
+import { createReadStream, existsSync } from 'fs';
 import { stat, writeFile } from 'fs/promises';
 import { Bucket, Storage } from '@google-cloud/storage';
 import { pipeline } from 'stream/promises';
 import toStream from 'to-readable-stream';
 import getStream from 'get-stream';
+import lruCache from 'lru-cache';
 
 export interface FileStorage {
   exists(filename: string): Promise<boolean>;
@@ -112,6 +113,40 @@ export async function fsFileStorage(rawRoot: string): Promise<FileStorage> {
     async write(filename, body) {
       const path = buildPath(root, filename);
       await writeFile(path, body);
+    },
+  };
+}
+
+const ONE_MB_IN_BYTES = 1_000_000;
+
+export async function memoryFileStorage(
+  maxSize?: number,
+): Promise<FileStorage> {
+  maxSize = maxSize ?? ONE_MB_IN_BYTES * 128;
+  const cache = new lruCache<string, Buffer>({
+    maxSize,
+    sizeCalculation: (buf) => buf.length,
+    updateAgeOnGet: true,
+  });
+
+  return {
+    exists(filename: string): Promise<boolean> {
+      return Promise.resolve(cache.has(filename));
+    },
+
+    read(filename: string): Readable | Buffer {
+      const data = cache.get(filename);
+      invariant(data, `No data for cache key ${filename}`);
+      return data;
+    },
+
+    async write(filename, body): Promise<void> {
+      if (Buffer.isBuffer(body)) {
+        cache.set(filename, body);
+      } else {
+        const buf = await getStream.buffer(body);
+        cache.set(filename, buf);
+      }
     },
   };
 }
