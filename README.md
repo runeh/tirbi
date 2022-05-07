@@ -2,6 +2,8 @@
 
 ## To do
 
+- [ ] Add some tests
+- [ ] In-memory storage adapter
 - [ ] Make the other methods on storage allowed to return promises
 - [ ] Throw handling is weird
 - [ ] Use custom errors when throwing?
