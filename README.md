@@ -2,6 +2,7 @@
 
 ## To do
 
+- [ ] Hook up env stuff in commander
 - [ ] Allow omitting token to allow everything
 - [ ] Add docs
 - [ ] Rename fileStorage to cacheStorage?
@@ -17,9 +18,9 @@
 - [ ] Maybe get rid of envalid again? Or pass cli stuff into it?
 - [ ] Check for permissions when using gcp
 - [ ] Check for directory existence / create dir when using fs
-- [ ] Add some CLI stuff?
 - [ ] Check if promises.stat always succeeds. Use that instead of also exists in
       that case
 - [ ] Check if fs folder is read/writable?
 - [ ] Pretty output cli option
+- [x] Add some CLI stuff?
 - [x] In-memory storage adapter
