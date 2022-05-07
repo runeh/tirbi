@@ -9,7 +9,7 @@ import toStream from 'to-readable-stream';
 import getStream from 'get-stream';
 import lruCache from 'lru-cache';
 
-export interface FileStorage {
+export interface CacheStorage {
   exists(filename: string): Promise<boolean>;
   read(filename: string): Readable | Buffer;
   write(filename: string, body: Readable | Buffer): Promise<void>;
@@ -62,7 +62,9 @@ export async function checkGcpBucketPermissions(bucket: Bucket): Promise<void> {
   }
 }
 
-export async function gcpFileStorage(bucketName: string): Promise<FileStorage> {
+export async function gcpCacheStorage(
+  bucketName: string,
+): Promise<CacheStorage> {
   const storage = new Storage();
   const bucket = storage.bucket(bucketName);
 
@@ -88,7 +90,7 @@ export async function gcpFileStorage(bucketName: string): Promise<FileStorage> {
   };
 }
 
-export async function fsFileStorage(rawRoot: string): Promise<FileStorage> {
+export async function fsCacheStorage(rawRoot: string): Promise<CacheStorage> {
   const root = rawRoot.endsWith('/') ? rawRoot : `${rawRoot}/`;
   if (!existsSync(root)) {
     throw new Error(`Storage directory doesn't exist: "${root}"`);
@@ -119,9 +121,9 @@ export async function fsFileStorage(rawRoot: string): Promise<FileStorage> {
 
 const ONE_MB_IN_BYTES = 1_000_000;
 
-export async function memoryFileStorage(
+export async function memoryCacheStorage(
   maxSize?: number,
-): Promise<FileStorage> {
+): Promise<CacheStorage> {
   maxSize = maxSize ?? ONE_MB_IN_BYTES * 128;
   const cache = new lruCache<string, Buffer>({
     maxSize,

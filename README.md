@@ -35,7 +35,6 @@ tirbi | pino-pretty
 ## To do
 
 - [ ] Add docs
-- [ ] Rename fileStorage to cacheStorage?
 - [ ] Don't use URIs for storage that isn't URIs?
 - [ ] Add some tests
 - [ ] Make the other methods on storage allowed to return promises
@@ -56,3 +55,4 @@ tirbi | pino-pretty
 - [x] Check for permissions when using gcp
 - [x] Hook up env stuff in commander
 - [x] Maybe get rid of envalid again? Or pass cli stuff into it?
+- [x] Rename fileStorage to cacheStorage?

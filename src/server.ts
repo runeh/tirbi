@@ -1,10 +1,10 @@
 import fastify from 'fastify';
 import type { FastifyPluginAsync } from 'fastify';
 import type { IncomingMessage } from 'http';
-import type { FileStorage } from './storage';
+import type { CacheStorage } from './storage';
 import bearerAuthPlugin from '@fastify/bearer-auth';
 import fp from 'fastify-plugin';
-import { fsFileStorage, gcpFileStorage, memoryFileStorage } from './storage';
+import { fsCacheStorage, gcpCacheStorage, memoryCacheStorage } from './storage';
 
 export type StorageDef =
   | { kind: 'gs'; bucket: string }
@@ -15,18 +15,20 @@ const storagePluginCallback: FastifyPluginAsync<{
   storageDef: StorageDef;
 }> = async (instance, opts) => {
   const { storageDef } = opts;
-  let cacheStorage: FileStorage;
+  let cacheStorage: CacheStorage;
 
   switch (storageDef.kind) {
     case 'gs': {
       instance.log.info(`Setting up GCP cache storage: ${storageDef.bucket}`);
-      cacheStorage = await gcpFileStorage(storageDef.bucket);
+      cacheStorage = await gcpCacheStorage(storageDef.bucket);
       break;
     }
 
     case 'fs': {
-      instance.log.info(`Setting up file cache storage: ${storageDef.path}`);
-      cacheStorage = await fsFileStorage(storageDef.path);
+      instance.log.info(
+        `Setting up file system cache storage: ${storageDef.path}`,
+      );
+      cacheStorage = await fsCacheStorage(storageDef.path);
       break;
     }
 
@@ -35,9 +37,9 @@ const storagePluginCallback: FastifyPluginAsync<{
         ? `${storageDef.maxMegabytes}MB`
         : 'default';
       instance.log.info(
-        `Setting up memory cache storage. Max size: ${mbString}`,
+        `Setting up in-memory cache storage. Max size: ${mbString}`,
       );
-      cacheStorage = await memoryFileStorage(storageDef.maxMegabytes);
+      cacheStorage = await memoryCacheStorage(storageDef.maxMegabytes);
       break;
     }
 
@@ -53,7 +55,7 @@ const storagePlugin = fp(storagePluginCallback, '3.x');
 
 declare module 'fastify' {
   interface FastifyInstance {
-    cacheStorage: FileStorage;
+    cacheStorage: CacheStorage;
   }
 }
 
