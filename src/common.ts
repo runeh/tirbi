@@ -1,4 +1,4 @@
-import type { StorageDef } from './server';
+import type { StorageConfig } from './server';
 
 /**
  * Returns the return value of a function, or null if the function threw
@@ -16,7 +16,7 @@ function throwing<T>(fun: () => T): T | null {
  * Will never throw.
  * @param raw
  */
-export function parseStorageUrl(raw: string): StorageDef | null {
+export function parseStorageUri(raw: string): StorageConfig | null {
   const url = throwing(() => new URL(raw));
   if (!url) {
     return null;

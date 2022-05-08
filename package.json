@@ -1,6 +1,6 @@
 {
   "name": "tirbi",
-  "version": "1.0.0",
+  "version": "1.0.0-beta1",
   "author": "Rune Finstad Halvorsen",
   "license": "UNLICENSED",
   "bin": "./dist/cli.js",
@@ -24,6 +24,6 @@
     "get-stream": "^6.0.1",
     "lru-cache": "^7.9.0",
     "to-readable-stream": "^2.0.0",
-    "ts-invariant": "^0.9.4"
+    "ts-invariant": "^0.10.2"
   }
 }

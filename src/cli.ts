@@ -1,10 +1,10 @@
-import { parseStorageUrl } from './common';
-import { createServer, StorageDef } from './server';
+import { parseStorageUri } from './common';
+import { createServer, StorageConfig } from './server';
 import { InvalidArgumentError, Option, program } from 'commander';
 
 const defaultHost = '0.0.0.0';
 const defaultPort = 8080;
-const defaultStorage: StorageDef = { kind: 'memory' };
+const defaultStorage: StorageConfig = { kind: 'memory' };
 
 function parsePortArg(raw: string) {
   const port = Number(raw);
@@ -19,7 +19,7 @@ function parsePortArg(raw: string) {
 }
 
 function parseStorageArg(raw: string) {
-  const parsed = parseStorageUrl(raw);
+  const parsed = parseStorageUri(raw);
   if (!parsed) {
     throw new InvalidArgumentError('Invalid storage URI');
   }
@@ -79,7 +79,7 @@ program
 interface ParseOptions {
   port: number;
   host: string;
-  storage: StorageDef;
+  storage: StorageConfig;
   token?: string[];
 }
 
@@ -87,7 +87,7 @@ async function main() {
   program.parse();
   // Not really typesafe, but good enough
   const { token, host, storage, port }: ParseOptions = program.opts();
-  const server = createServer({ storageDef: storage, tokens: token ?? [] });
+  const server = createServer({ storageConfig: storage, tokens: token ?? [] });
   await server.listen(port, host);
 }
 

@@ -1,2 +1,2 @@
-export { createServer, StorageDef } from './server';
-export { parseStorageUrl } from './common';
+export { createServer, ServerConfig, StorageConfig } from './server';
+export { parseStorageUri } from './common';
