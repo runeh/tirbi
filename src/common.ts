@@ -1,20 +1,41 @@
 import type { StorageDef } from './server';
 
 /**
- * Guaranteed not to throw!
+ * Returns the return value of a function, or null if the function threw
+ */
+function throwing<T>(fun: () => T): T | null {
+  try {
+    return fun();
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Parse a storage URL. Return null if not a valid URL.
+ * Will never throw.
+ * @param raw
  */
 export function parseStorageUrl(raw: string): StorageDef | null {
-  try {
-    const url = new URL(raw);
-    if (url.protocol === 'gs:') {
+  const url = throwing(() => new URL(raw));
+  if (!url) {
+    return null;
+  }
+
+  switch (url.protocol) {
+    case 'gs': {
       return { kind: 'gs', bucket: `${url.host}${url.pathname}` };
-    } else if (url.protocol === 'file:') {
+    }
+
+    case 'file:': {
       if (url.host !== '') {
         return null;
       }
 
       return { kind: 'fs', path: url.pathname };
-    } else if (url.protocol === 'memory:') {
+    }
+
+    case 'memory:': {
       const rawMaxSize = Number(url.searchParams.get('maxMegabytes'));
       const maxMegabytes =
         isNaN(rawMaxSize) || rawMaxSize === 0 ? undefined : rawMaxSize;
@@ -23,6 +44,9 @@ export function parseStorageUrl(raw: string): StorageDef | null {
         ? { kind: 'memory', maxMegabytes }
         : { kind: 'memory' };
     }
-  } catch (err) {}
-  return null;
+
+    default: {
+      return null;
+    }
+  }
 }
