@@ -111,7 +111,7 @@ tirbi | pino-pretty
 ```
 
 ## To do
-
+- [ ] Rename maxMegabytes to masMb or similar
 - [ ] Listen for events so we don't get 404?
 - [ ] jsdoc comments
 - [ ] Pull the cache server parts into a plugin that can be imported separately
