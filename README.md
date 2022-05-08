@@ -37,7 +37,6 @@ tirbi | pino-pretty
 - [ ] Add docs
 - [ ] Don't use URIs for storage that isn't URIs?
 - [ ] Add some tests
-- [ ] Make the other methods on storage allowed to return promises
 - [ ] Throw handling is weird
 - [ ] Use custom errors when throwing?
 - [ ] Add non-http logging?
@@ -56,3 +55,4 @@ tirbi | pino-pretty
 - [x] Hook up env stuff in commander
 - [x] Maybe get rid of envalid again? Or pass cli stuff into it?
 - [x] Rename fileStorage to cacheStorage?
+- [x] Make the other methods on storage allowed to return promises

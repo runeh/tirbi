@@ -11,7 +11,7 @@ import lruCache from 'lru-cache';
 
 export interface CacheStorage {
   exists(filename: string): Promise<boolean>;
-  read(filename: string): Readable | Buffer;
+  read(filename: string): (Readable | Buffer) | Promise<Readable | Buffer>;
   write(filename: string, body: Readable | Buffer): Promise<void>;
 }
 
