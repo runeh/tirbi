@@ -1,8 +1,11 @@
 # tirbi
 
-Tirbi is a remote cache server that is compatible with
+Tirbi is a remote cache implementation that is compatible with
 [turborepo](https://turborepo.org). It supports storing cached assets on the
 file system, in memory, or in Google Cloud Storage bucket.
+
+Tirbi can be used either as a stand-alone command line application, or as a
+fastify plugin.
 
 ## Getting started
 
@@ -43,18 +46,20 @@ The server can also be configured using environment variables:
 
 ## Programmatic usage
 
-The module exports a `createServer` function that creates a fastify server:
+The module exports a `tirbiPlugin` object that is a fastify plugin. It can be
+used like this:
 
 ```typescript
-import { createServer } from 'tirbi';
+import fastify from 'fastify';
+import { tirbiPlugin } from 'tirbi';
 
 async function main() {
-  const server = await createServer({
-    token: ['secret token 1'],
+  const server = fastify({ logger: true });
+  server.register(tirbiPlugin, {
     storageConfig: { kind: 'memory' },
+    tokens: ['s3cr3t'],
   });
-
-  await listen(3030, '0.0.0.0');
+  await server.listen(3030, '0.0.0.0');
 }
 
 main();
@@ -62,10 +67,10 @@ main();
 
 The module also exports the following:
 
-- `ServerConfig` - interface describing the server config.
-- `StorageConfig` - interface describing the available storage configs.
-- `parseStorageUri` - utility function to parse a storage URI into a
-  `StorageConfig` object.
+- `StorageConfig` - Interface describing the available storage configs.
+- `parseStorageUri` - Utility function to parse a storage URI into a
+  `StorageConfig` object
+- `TirbiConfig` - Interface describing the config options of the fastify plugin.
 
 Have a look in [`cli.ts`](./src/cli.ts) to see how the tirbi CLI starts a
 server.
@@ -87,7 +92,7 @@ Use environment variables the control the settings of the server.
 
 ## Compatibility
 
-Tirbi is known to work with turborepo versions between 1.23 and 1.28.
+Tirbi has been tested with turborepo versions between 1.23 and 1.28.
 
 ## Caveats
 
@@ -111,12 +116,13 @@ tirbi | pino-pretty
 ```
 
 ## To do
-- [ ] husky
-- [ ] eslint
-- [ ] Rename maxMegabytes to masMb or similar
+
+- [ ] Rename storageConfig in config?
+- [ ] Husky
+- [ ] Eslint
+- [ ] Rename maxMegabytes to maxMb or similar
 - [ ] Listen for events so we don't get 404?
 - [ ] jsdoc comments
-- [ ] Pull the cache server parts into a plugin that can be imported separately
 - [ ] Proper shutdown / signal stuff
 - [ ] Add docs
 - [ ] Add some tests
@@ -127,6 +133,7 @@ tirbi | pino-pretty
 - [ ] Check if promises.stat always succeeds. Use that instead of also exists in
       that case
 - [ ] Check if fs folder is read/writable?
+- [x] Pull the cache server parts into a plugin that can be imported separately
 - [x] Add some CLI stuff?
 - [x] In-memory storage adapter
 - [x] Allow omitting token to allow everything
