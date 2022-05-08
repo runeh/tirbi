@@ -109,6 +109,7 @@ tirbi | pino-pretty
 
 ## To do
 
+- [ ] jsdoc comments
 - [ ] Pull the cache server parts into a plugin that can be imported separately
 - [ ] Proper shutdown / signal stuff
 - [ ] Add docs

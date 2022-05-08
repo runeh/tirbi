@@ -2,7 +2,7 @@ import invariant from 'ts-invariant';
 import { join } from 'path';
 import type { Readable } from 'stream';
 import { createReadStream, existsSync } from 'fs';
-import { stat, writeFile } from 'fs/promises';
+import { stat, writeFile, readFile, unlink } from 'fs/promises';
 import { Bucket, Storage } from '@google-cloud/storage';
 import { pipeline } from 'stream/promises';
 import toStream from 'to-readable-stream';
@@ -23,34 +23,38 @@ function buildPath(root: string, filename: string) {
   return full;
 }
 
+function getWriteTestData() {
+  const filename = `tirbi-temp-${Math.round(Math.random() * 100000)}`;
+  return { filename, body: `Test file contents for ${filename}` };
+}
+
 /**
  * Verify that the gcp storage client is allowed to create, read, and delete
  * files from the storage bucket
  */
 export async function checkGcpBucketPermissions(bucket: Bucket): Promise<void> {
-  const testFileName = `tirbi-temp-${Math.round(Math.random() * 100000)}`;
-  const expectedContents = `Test file contents for ${testFileName}`;
+  const { filename, body } = getWriteTestData();
 
   const [bucketExists] = await bucket.exists();
   if (!bucketExists) {
     throw new Error(`Bucket doesn't exist: "${bucket.name}"`);
   }
 
-  const testFile = bucket.file(testFileName);
+  const testFile = bucket.file(filename);
 
   const [existsBeforeWrite] = await testFile.exists();
   if (existsBeforeWrite) {
     throw new Error("File shouldn't exist yet");
   }
 
-  await pipeline(toStream(expectedContents), testFile.createWriteStream());
+  await pipeline(toStream(body), testFile.createWriteStream());
   const [existsAfterWrite] = await testFile.exists();
   if (!existsAfterWrite) {
     throw new Error('File should exist');
   }
 
   const actualContents = await getStream(testFile.createReadStream());
-  if (actualContents !== expectedContents) {
+  if (actualContents !== body) {
     throw new Error('Unexpected file contents');
   }
 
@@ -99,6 +103,25 @@ export async function fsCacheStorage(rawRoot: string): Promise<CacheStorage> {
   const pathInfo = await stat(root);
   if (!pathInfo.isDirectory()) {
     throw new Error(`Storage path is not a directory: "${root}"`);
+  }
+
+  const { filename, body } = getWriteTestData();
+  const testPath = join(root, filename);
+  await writeFile(testPath, body);
+
+  if (!existsSync(testPath)) {
+    throw new Error(`Test file could not be written: "${root}"`);
+  }
+
+  const readData = await readFile(testPath, 'utf-8');
+  if (readData !== body) {
+    throw new Error('Body of test file did not match');
+  }
+
+  await unlink(testPath);
+
+  if (!existsSync(testPath)) {
+    throw new Error(`Test file could not be deleted: "${root}"`);
   }
 
   return {
