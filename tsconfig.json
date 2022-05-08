@@ -1,5 +1,7 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
+  "exclude": ["dist/", "test/"],
+  "include": ["src/"],
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
