@@ -1,8 +1,8 @@
 import { createReadStream, existsSync } from 'fs';
 import { readFile, stat, unlink, writeFile } from 'fs/promises';
 import { join } from 'path';
-import type { CacheStorage } from './types';
 import { buildPath, getWriteTestData } from './common';
+import type { CacheStorage } from './types';
 
 export async function fsCacheStorage(rawRoot: string): Promise<CacheStorage> {
   const root = rawRoot.endsWith('/') ? rawRoot : `${rawRoot}/`;

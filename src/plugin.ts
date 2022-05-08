@@ -1,9 +1,9 @@
-import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import type { IncomingMessage } from 'http';
-import { fsCacheStorage, memoryCacheStorage, gcpCacheStorage } from './storage';
 import bearerAuthPlugin from '@fastify/bearer-auth';
+import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 import type { StorageConfig } from './common';
+import { fsCacheStorage, gcpCacheStorage, memoryCacheStorage } from './storage';
 
 export interface TirbiConfig {
   tokens: string[];
@@ -60,7 +60,7 @@ const tirbiPluginCallback: FastifyPluginAsync<TirbiConfig> = async (
   const storage = await initStorage(instance, storageConfig);
 
   if (tokens.length) {
-    instance.register(bearerAuthPlugin, { keys: new Set(tokens) });
+    await instance.register(bearerAuthPlugin, { keys: new Set(tokens) });
   } else {
     instance.log.warn('tirbi configured without token authorization!');
   }
@@ -72,7 +72,7 @@ const tirbiPluginCallback: FastifyPluginAsync<TirbiConfig> = async (
     if (exists) {
       return storage.read(req.params.hash);
     } else {
-      reply.status(404);
+      await reply.status(404);
       return 'not found';
     }
   });
@@ -90,7 +90,7 @@ const tirbiPluginCallback: FastifyPluginAsync<TirbiConfig> = async (
     Body: IncomingMessage;
   }>('/v8/artifacts/:hash', async (req, reply) => {
     await storage.write(req.params.hash, req.body);
-    reply.status(204);
+    await reply.status(204);
   });
 };
 

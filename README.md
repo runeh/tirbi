@@ -55,7 +55,7 @@ import { tirbiPlugin } from 'tirbi';
 
 async function main() {
   const server = fastify({ logger: true });
-  server.register(tirbiPlugin, {
+  await server.register(tirbiPlugin, {
     storageConfig: { kind: 'memory' },
     tokens: ['s3cr3t'],
   });

@@ -1,14 +1,12 @@
-import lruCache from 'lru-cache';
 import type { Readable } from 'stream';
-import invariant from 'ts-invariant';
 import getStream from 'get-stream';
+import lruCache from 'lru-cache';
+import invariant from 'ts-invariant';
 import type { CacheStorage } from './types';
 
 const ONE_MB_IN_BYTES = 1_000_000;
 
-export async function memoryCacheStorage(
-  maxSize?: number,
-): Promise<CacheStorage> {
+export function memoryCacheStorage(maxSize?: number): CacheStorage {
   maxSize = maxSize ?? ONE_MB_IN_BYTES * 128;
   const cache = new lruCache<string, Buffer>({
     maxSize,
