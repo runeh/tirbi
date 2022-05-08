@@ -80,11 +80,8 @@ server.
 The following dockerfile lets you run tirbi in docker:
 
 ```dockerfile
-
 FROM node:16-alpine3.14
-
 RUN npm install -g tirbi
-
 CMD ["tirbi"]
 ```
 
@@ -119,9 +116,6 @@ yarn lint-staged
 
 ## To do
 
-- [ ] Make sure we emit types and things
-- [ ] Hook up entrypoint etc in package.json
-- [ ] Rename storageConfig in config?
 - [ ] Listen for events so we don't get 404?
 - [ ] jsdoc comments
 - [ ] Proper shutdown / signal stuff
@@ -132,6 +126,9 @@ yarn lint-staged
 - [ ] Handle the "events" request?
 - [ ] Check if promises.stat always succeeds. Use that instead of also exists in
       that case
+- [x] Make sure we emit types and things
+- [x] Hook up entrypoint etc in package.json
+- [x] Rename storageConfig in config?
 - [x] Rename maxMegabytes to maxMb or similar
 - [x] Check for directory existence / create dir when using fs
 - [x] Check if fs folder is read/writable?

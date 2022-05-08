@@ -4,15 +4,17 @@
     "rootDir": "./src",
     "outDir": "./dist",
 
-    "importsNotUsedAsValues": "error",
     "declaration": true,
+    "declarationMap": true,
     "exactOptionalPropertyTypes": true,
+    "importsNotUsedAsValues": "error",
     "noFallthroughCasesInSwitch":true,
     "noImplicitReturns": true,
     "noUncheckedIndexedAccess":true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "skipLibCheck": false,
+    "sourceMap": true,
     "useUnknownInCatchVariables": true
   }
 }

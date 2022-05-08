@@ -4,6 +4,8 @@
   "author": "Rune Finstad Halvorsen",
   "license": "UNLICENSED",
   "bin": "./dist/cli.js",
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
   "scripts": {
     "build": "tsc -p  .",
     "start": "node ./dist/index.js",
