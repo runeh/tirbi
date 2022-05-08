@@ -95,6 +95,9 @@ Tirbi is known to work with turborepo versions between 1.23 and 1.28.
   the team setting, so it can be set to anything
 - There's a bug that only lets you pass in a single auth token to tirbi when
   using environment variables.
+- Turborepo sends requests to an `events` URL, with information about what it's
+  been doing. Tirbi ignores this call, so it will turn up in the logs as a 404
+  request.
 
 ## Misc
 
@@ -109,6 +112,7 @@ tirbi | pino-pretty
 
 ## To do
 
+- [ ] Listen for events so we don't get 404?
 - [ ] jsdoc comments
 - [ ] Pull the cache server parts into a plugin that can be imported separately
 - [ ] Proper shutdown / signal stuff
