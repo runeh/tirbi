@@ -34,11 +34,9 @@ tirbi | pino-pretty
 
 ## To do
 
+- [ ] Proper shutdown / signal stuff
 - [ ] Add docs
-- [ ] Don't use URIs for storage that isn't URIs?
 - [ ] Add some tests
-- [ ] Throw handling is weird
-- [ ] Use custom errors when throwing?
 - [ ] Add non-http logging?
 - [ ] Trace IDs?
 - [ ] Handle the "events" request?
@@ -46,7 +44,6 @@ tirbi | pino-pretty
 - [ ] Check if promises.stat always succeeds. Use that instead of also exists in
       that case
 - [ ] Check if fs folder is read/writable?
-- [ ] Pretty output cli option
 - [x] Add some CLI stuff?
 - [x] In-memory storage adapter
 - [x] Allow omitting token to allow everything
@@ -56,3 +53,7 @@ tirbi | pino-pretty
 - [x] Maybe get rid of envalid again? Or pass cli stuff into it?
 - [x] Rename fileStorage to cacheStorage?
 - [x] Make the other methods on storage allowed to return promises
+- [-] Throw handling is weird
+- [-] Don't use URIs for storage that isn't URIs?
+- [-] Pretty output cli option
+- [-] Use custom errors when throwing?
