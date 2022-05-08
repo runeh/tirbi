@@ -1,4 +1,7 @@
-import type { StorageConfig } from './server';
+export type StorageConfig =
+  | { kind: 'gs'; bucket: string }
+  | { kind: 'fs'; path: string }
+  | { kind: 'memory'; maxMegabytes?: number };
 
 /**
  * Returns the return value of a function, or null if the function threw

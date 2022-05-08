@@ -5,11 +5,7 @@ import type { CacheStorage } from './storage';
 import bearerAuthPlugin from '@fastify/bearer-auth';
 import fp from 'fastify-plugin';
 import { fsCacheStorage, gcpCacheStorage, memoryCacheStorage } from './storage';
-
-export type StorageConfig =
-  | { kind: 'gs'; bucket: string }
-  | { kind: 'fs'; path: string }
-  | { kind: 'memory'; maxMegabytes?: number };
+import type { StorageConfig } from './common';
 
 const storagePluginCallback: FastifyPluginAsync<{
   storageConfig: StorageConfig;

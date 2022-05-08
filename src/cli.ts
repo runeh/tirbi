@@ -1,5 +1,5 @@
-import { parseStorageUri } from './common';
-import { createServer, StorageConfig } from './server';
+import { parseStorageUri, StorageConfig } from './common';
+import { createServer } from './server';
 import { InvalidArgumentError, Option, program } from 'commander';
 
 const defaultHost = '0.0.0.0';
