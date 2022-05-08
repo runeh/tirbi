@@ -7,15 +7,15 @@ const defaultPort = 8080;
 const defaultStorage: StorageDef = { kind: 'memory' };
 
 function parsePortArg(raw: string) {
-  const asNumber = Number(raw);
-  if (isNaN(asNumber)) {
-    throw new InvalidArgumentError('Not a number');
+  const port = Number(raw);
+  if (isNaN(port)) {
+    throw new InvalidArgumentError('Port must be a number');
   }
 
-  if (asNumber < 0 || asNumber > 65535) {
-    throw new InvalidArgumentError('Invalid port number');
+  if (port < 1 || port > 65535) {
+    throw new InvalidArgumentError('Port must be between 1 and 65535');
   }
-  return asNumber;
+  return port;
 }
 
 function parseStorageArg(raw: string) {
