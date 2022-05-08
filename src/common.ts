@@ -18,7 +18,10 @@ export function parseStorageUrl(raw: string): StorageDef | null {
       const rawMaxSize = Number(url.searchParams.get('maxMegabytes'));
       const maxMegabytes =
         isNaN(rawMaxSize) || rawMaxSize === 0 ? undefined : rawMaxSize;
-      return { kind: 'memory', maxMegabytes };
+
+      return maxMegabytes
+        ? { kind: 'memory', maxMegabytes }
+        : { kind: 'memory' };
     }
   } catch (err) {}
   return null;

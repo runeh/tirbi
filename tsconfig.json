@@ -3,6 +3,14 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "importsNotUsedAsValues": "error"
+    "importsNotUsedAsValues": "error",
+
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch":true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess":true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "skipLibCheck": false
   }
 }

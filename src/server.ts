@@ -43,9 +43,9 @@ const storagePluginCallback: FastifyPluginAsync<{
       break;
     }
 
-    default:
-      // fixme: TS should complain without this
-      return {} as never;
+    default: {
+      throw new Error('Bad switch case');
+    }
   }
 
   instance.decorate('cacheStorage', cacheStorage);
@@ -89,7 +89,7 @@ export function createServer(config: {
 
   server.addContentTypeParser(
     'application/octet-stream',
-    (req, payload, done) => {
+    (_req, payload, done) => {
       // fixme: too naive I guess
       done(null, payload);
     },
