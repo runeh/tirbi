@@ -120,20 +120,20 @@ yarn lint-staged
 ## To do
 
 - [ ] Rename storageConfig in config?
-- [ ] Husky
-- [ ] Rename maxMegabytes to maxMb or similar
 - [ ] Listen for events so we don't get 404?
 - [ ] jsdoc comments
 - [ ] Proper shutdown / signal stuff
-- [ ] Add docs
+- [ ] Add more docs
 - [ ] Add some tests
 - [ ] Add non-http logging?
 - [ ] Trace IDs?
 - [ ] Handle the "events" request?
-- [ ] Check for directory existence / create dir when using fs
 - [ ] Check if promises.stat always succeeds. Use that instead of also exists in
       that case
-- [ ] Check if fs folder is read/writable?
+- [x] Rename maxMegabytes to maxMb or similar
+- [x] Check for directory existence / create dir when using fs
+- [x] Check if fs folder is read/writable?
+- [x] Husky
 - [x] Eslint
 - [x] Pull the cache server parts into a plugin that can be imported separately
 - [x] Add some CLI stuff?

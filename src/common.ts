@@ -1,7 +1,7 @@
 export type StorageConfig =
   | { kind: 'gs'; bucket: string }
   | { kind: 'fs'; path: string }
-  | { kind: 'memory'; maxMegabytes?: number };
+  | { kind: 'memory'; sizeMb?: number };
 
 /**
  * Returns the return value of a function, or null if the function threw
@@ -39,13 +39,10 @@ export function parseStorageUri(raw: string): StorageConfig | null {
     }
 
     case 'memory:': {
-      const rawMaxSize = Number(url.searchParams.get('maxMegabytes'));
-      const maxMegabytes =
-        isNaN(rawMaxSize) || rawMaxSize === 0 ? undefined : rawMaxSize;
-
-      return maxMegabytes
-        ? { kind: 'memory', maxMegabytes }
-        : { kind: 'memory' };
+      const rawSizeMb = Number(url.searchParams.get('sizeMb'));
+      const sizeMb =
+        isNaN(rawSizeMb) || rawSizeMb === 0 ? undefined : rawSizeMb;
+      return sizeMb ? { kind: 'memory', sizeMb } : { kind: 'memory' };
     }
 
     default: {

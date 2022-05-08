@@ -44,7 +44,7 @@ The following storage URI formats are allowed:
 - gs://bucket-name/folder - a Google cloud storage bucket with optional folder.
 - fs:/tmp/assets - the '/tmp/assets' folder on the local disk
 - memory:// - in-memory storage.
-- memory://?maxMegabytes=256 - in-memory storage with a max storage size
+- memory://?sizeMb=256 - in-memory storage with a max storage size
 
 Running the program with no arguments starts a tirbi server on port 8080 that
 allows any bearer token and stores artifacts in memory.

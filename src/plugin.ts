@@ -27,13 +27,13 @@ function initStorage(instance: FastifyInstance, storageConfig: StorageConfig) {
     }
 
     case 'memory': {
-      const mbString = storageConfig.maxMegabytes
-        ? `${storageConfig.maxMegabytes}MB`
+      const mbString = storageConfig.sizeMb
+        ? `${storageConfig.sizeMb}MB`
         : 'default';
       instance.log.info(
         `Setting up in-memory cache storage. Max size: ${mbString}`,
       );
-      return memoryCacheStorage(storageConfig.maxMegabytes);
+      return memoryCacheStorage(storageConfig.sizeMb);
     }
   }
 }
