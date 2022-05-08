@@ -66,7 +66,6 @@ const tirbiPluginCallback: FastifyPluginAsync<TirbiConfig> = async (
   }
 
   instance.get<{
-    Headers: {};
     Params: { hash: string };
   }>('/v8/artifacts/:hash', async (req, reply) => {
     const exists = await storage.exists(req.params.hash);
@@ -87,7 +86,6 @@ const tirbiPluginCallback: FastifyPluginAsync<TirbiConfig> = async (
   );
 
   instance.put<{
-    Headers: {};
     Params: { hash: string };
     Body: IncomingMessage;
   }>('/v8/artifacts/:hash', async (req, reply) => {

@@ -6,12 +6,16 @@
   "bin": "./dist/cli.js",
   "scripts": {
     "build": "tsc -p  .",
-    "start": "node ./dist/index.js"
+    "start": "node ./dist/index.js",
+    "lint": "eslint src/**"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.2",
     "@types/lru-cache": "^7.6.1",
     "@types/node": "^16.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
+    "eslint": "^8.15.0",
     "prettier": "^2.6.2",
     "typescript": "^4.6.4"
   },
@@ -19,6 +23,7 @@
     "@fastify/bearer-auth": "^7.0.1",
     "@google-cloud/storage": "^5.19.4",
     "commander": "^9.2.0",
+    "eslint-config-prettier": "^8.5.0",
     "fastify": "^3.29.0",
     "fastify-plugin": "^3.0.0",
     "get-stream": "^6.0.1",
