@@ -124,8 +124,6 @@ yarn lint-staged
 - [ ] Add non-http logging?
 - [ ] Trace IDs?
 - [ ] Handle the "events" request?
-- [ ] Check if promises.stat always succeeds. Use that instead of also exists in
-      that case
 - [x] Make sure we emit types and things
 - [x] Hook up entrypoint etc in package.json
 - [x] Rename storageConfig in config?
@@ -149,3 +147,5 @@ yarn lint-staged
 - [-] Don't use URIs for storage that isn't URIs?
 - [-] Pretty output cli option
 - [-] Use custom errors when throwing?
+- [-] Check if promises.stat always succeeds. Use that instead of also exists in
+  that case
