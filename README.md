@@ -115,6 +115,8 @@ To get nicely formatted logs on the command line, use
 tirbi | pino-pretty
 ```
 
+yarn lint-staged
+
 ## To do
 
 - [ ] Rename storageConfig in config?
