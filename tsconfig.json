@@ -3,8 +3,9 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "importsNotUsedAsValues": "error",
 
+    "importsNotUsedAsValues": "error",
+    "declaration": true,
     "exactOptionalPropertyTypes": true,
     "noFallthroughCasesInSwitch":true,
     "noImplicitReturns": true,
