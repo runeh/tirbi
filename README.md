@@ -55,7 +55,7 @@ import { tirbiPlugin } from 'tirbi';
 
 async function main() {
   const server = fastify({ logger: true });
-  server.register(tirbiPlugin, {
+  await server.register(tirbiPlugin, {
     storageConfig: { kind: 'memory' },
     tokens: ['s3cr3t'],
   });
@@ -119,7 +119,6 @@ tirbi | pino-pretty
 
 - [ ] Rename storageConfig in config?
 - [ ] Husky
-- [ ] Eslint
 - [ ] Rename maxMegabytes to maxMb or similar
 - [ ] Listen for events so we don't get 404?
 - [ ] jsdoc comments
@@ -133,6 +132,7 @@ tirbi | pino-pretty
 - [ ] Check if promises.stat always succeeds. Use that instead of also exists in
       that case
 - [ ] Check if fs folder is read/writable?
+- [x] Eslint
 - [x] Pull the cache server parts into a plugin that can be imported separately
 - [x] Add some CLI stuff?
 - [x] In-memory storage adapter

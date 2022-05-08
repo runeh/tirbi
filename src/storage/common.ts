@@ -1,5 +1,5 @@
-import invariant from 'ts-invariant';
 import { join } from 'path';
+import invariant from 'ts-invariant';
 
 export function getWriteTestData() {
   const filename = `tirbi-temp-${Math.round(Math.random() * 100000)}`;

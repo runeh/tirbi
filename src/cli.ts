@@ -1,7 +1,7 @@
-import { parseStorageUri, StorageConfig } from './common';
 import { InvalidArgumentError, Option, program } from 'commander';
-import { tirbiPlugin } from './plugin';
 import fastify from 'fastify';
+import { StorageConfig, parseStorageUri } from './common';
+import { tirbiPlugin } from './plugin';
 
 const defaultHost = '0.0.0.0';
 const defaultPort = 8080;
@@ -89,8 +89,13 @@ async function main() {
   // Not really typesafe, but good enough
   const { token, host, storage, port }: ParseOptions = program.opts();
   const server = fastify({ logger: true });
-  server.register(tirbiPlugin, { storageConfig: storage, tokens: token ?? [] });
+  await server.register(tirbiPlugin, {
+    storageConfig: storage,
+    tokens: token ?? [],
+  });
   await server.listen(port, host);
 }
 
-main();
+main().catch((err) => {
+  console.log(err);
+});

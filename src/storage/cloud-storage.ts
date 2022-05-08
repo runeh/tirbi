@@ -1,8 +1,8 @@
-import { Bucket, Storage } from '@google-cloud/storage';
-import { getWriteTestData } from './common';
 import { pipeline } from 'stream/promises';
-import toStream from 'to-readable-stream';
+import { Bucket, Storage } from '@google-cloud/storage';
 import getStream from 'get-stream';
+import toStream from 'to-readable-stream';
+import { getWriteTestData } from './common';
 import type { CacheStorage } from './types';
 
 /**
