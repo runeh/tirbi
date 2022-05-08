@@ -87,7 +87,6 @@ async function main() {
   program.parse();
   // Not really typesafe, but good enough
   const { token, host, storage, port }: ParseOptions = program.opts();
-  console.log(token);
   const server = createServer({ storageDef: storage, tokens: token ?? [] });
   await server.listen(port, host);
 }
