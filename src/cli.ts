@@ -14,7 +14,7 @@ function parsePortArg(raw: string) {
   }
 
   if (port < 1 || port > 65535) {
-    throw new InvalidArgumentError('Port must be between 1 and 65535');
+    throw new InvalidArgumentError('Port must be in range 1-65535');
   }
   return port;
 }
@@ -89,10 +89,7 @@ async function main() {
   // Not really typesafe, but good enough
   const { token, host, storage, port }: ParseOptions = program.opts();
   const server = fastify({ logger: true });
-  await server.register(tirbiPlugin, {
-    storageConfig: storage,
-    tokens: token ?? [],
-  });
+  await server.register(tirbiPlugin, { storage, tokens: token ?? [] });
   await server.listen(port, host);
 }
 

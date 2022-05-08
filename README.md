@@ -56,7 +56,7 @@ import { tirbiPlugin } from 'tirbi';
 async function main() {
   const server = fastify({ logger: true });
   await server.register(tirbiPlugin, {
-    storageConfig: { kind: 'memory' },
+    storage: { kind: 'memory' },
     tokens: ['s3cr3t'],
   });
   await server.listen(3030, '0.0.0.0');
@@ -119,6 +119,8 @@ yarn lint-staged
 
 ## To do
 
+- [ ] Make sure we emit types and things
+- [ ] Hook up entrypoint etc in package.json
 - [ ] Rename storageConfig in config?
 - [ ] Listen for events so we don't get 404?
 - [ ] jsdoc comments

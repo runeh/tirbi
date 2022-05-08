@@ -7,33 +7,27 @@ import { fsCacheStorage, gcpCacheStorage, memoryCacheStorage } from './storage';
 
 export interface TirbiConfig {
   tokens: string[];
-  storageConfig: StorageConfig;
+  storage: StorageConfig;
 }
 
-function initStorage(instance: FastifyInstance, storageConfig: StorageConfig) {
-  switch (storageConfig.kind) {
+function initStorage(instance: FastifyInstance, config: StorageConfig) {
+  switch (config.kind) {
     case 'gs': {
-      instance.log.info(
-        `Setting up GCP cache storage: ${storageConfig.bucket}`,
-      );
-      return gcpCacheStorage(storageConfig.bucket);
+      instance.log.info(`Setting up GCP cache storage: ${config.bucket}`);
+      return gcpCacheStorage(config.bucket);
     }
 
     case 'fs': {
-      instance.log.info(
-        `Setting up file system cache storage: ${storageConfig.path}`,
-      );
-      return fsCacheStorage(storageConfig.path);
+      instance.log.info(`Setting up file system cache storage: ${config.path}`);
+      return fsCacheStorage(config.path);
     }
 
     case 'memory': {
-      const mbString = storageConfig.sizeMb
-        ? `${storageConfig.sizeMb}MB`
-        : 'default';
+      const mbString = config.sizeMb ? `${config.sizeMb}MB` : 'default';
       instance.log.info(
         `Setting up in-memory cache storage. Max size: ${mbString}`,
       );
-      return memoryCacheStorage(storageConfig.sizeMb);
+      return memoryCacheStorage(config.sizeMb);
     }
   }
 }
@@ -48,19 +42,18 @@ const tirbiPluginCallback: FastifyPluginAsync<TirbiConfig> = async (
     instance.log.warn(
       'No configuration used when registiring tirbi. Using defaults',
     );
-    config = { tokens: [], storageConfig: { kind: 'memory' } };
+    config = { tokens: [], storage: { kind: 'memory' } };
   }
-  const { storageConfig, tokens } = config;
 
   instance.log.info(
     { ...config, tokens: '[redacted]' },
     `Initializing tirbi plugin`,
   );
 
-  const storage = await initStorage(instance, storageConfig);
+  const storage = await initStorage(instance, config.storage);
 
-  if (tokens.length) {
-    await instance.register(bearerAuthPlugin, { keys: new Set(tokens) });
+  if (config.tokens.length) {
+    await instance.register(bearerAuthPlugin, { keys: new Set(config.tokens) });
   } else {
     instance.log.warn('tirbi configured without token authorization!');
   }
