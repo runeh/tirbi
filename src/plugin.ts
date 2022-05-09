@@ -65,8 +65,9 @@ const tirbiPluginCallback: FastifyPluginAsync<TirbiConfig> = async (
     if (exists) {
       return storage.read(req.params.hash);
     } else {
-      await reply.status(404);
-      return 'not found';
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      reply.status(404);
+      return '';
     }
   });
 
@@ -83,7 +84,9 @@ const tirbiPluginCallback: FastifyPluginAsync<TirbiConfig> = async (
     Body: IncomingMessage;
   }>('/v8/artifacts/:hash', async (req, reply) => {
     await storage.write(req.params.hash, req.body);
-    await reply.status(204);
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    reply.status(204);
+    return '';
   });
 };
 
