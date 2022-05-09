@@ -120,7 +120,7 @@ yarn lint-staged
 - [ ] jsdoc comments
 - [ ] Proper shutdown / signal stuff
 - [ ] Add more docs
-- [ ] Add some tests
+- [ ] Add some more tests
 - [ ] Add non-http logging?
 - [ ] Trace IDs?
 - [ ] Handle the "events" request?

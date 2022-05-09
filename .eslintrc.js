@@ -30,6 +30,7 @@ module.exports = {
     'no-restricted-globals': ['error', 'event', 'fdescribe'],
     'no-return-await': 'error',
     'no-template-curly-in-string': 'error',
+    'eol-last': ['error', 'always'],
 
     'sort-imports': ['error', { ignoreDeclarationSort: true }],
     'import/order': [
