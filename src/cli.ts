@@ -8,6 +8,7 @@ import { tirbiPlugin } from './plugin';
 const defaultHost = '0.0.0.0';
 const defaultPort = 8080;
 const defaultStorage: StorageConfig = { kind: 'memory' };
+const defaultLivenessPath = '/healthz';
 
 function parsePortArg(raw: string) {
   const port = Number(raw);
@@ -76,6 +77,11 @@ program
       .argParser(parseStorageArg)
       .env('STORAGE'),
   )
+  .addOption(
+    new Option('-l, --liveness <path>', 'Path for liveness check').env(
+      'LIVENESS',
+    ),
+  )
   .version('1.0.0-beta1', '-v, --version', 'show tirbi version')
   .addHelpText('after', exampleText);
 
@@ -84,6 +90,7 @@ interface ParseOptions {
   host: string;
   storage: StorageConfig;
   token?: string[];
+  liveness: string;
 }
 
 function shutdown(
@@ -106,16 +113,23 @@ function shutdown(
 async function main() {
   program.parse();
   // Not really typesafe, but good enough
-  const { token, host, storage, port }: ParseOptions = program.opts();
-  const server = fastify({ logger: true });
-  await server.register(tirbiPlugin, { storage, tokens: token ?? [] });
+  const { token, host, storage, port, liveness }: ParseOptions = program.opts();
+  const tokens = token ?? [];
+  const livenessPath = liveness ?? defaultLivenessPath;
 
-  // Try to shutdown properly. If there are pending requests after 5 seconds,
-  // just shut down the process
+  const server = fastify({ logger: true });
+  await server.register(tirbiPlugin, { storage, tokens });
+
+  server.log.info(`Adding liveness probe on "${livenessPath}"`);
+  server.get(livenessPath, (_, reply) => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    reply.code(204).send();
+  });
+
+  // Try to shutdown properly, with a grace period of 5 seconds for requests to
+  // finish. If there are pending requests after that,just shut down the process.
   for (const signal of ['SIGTERM', 'SIGINT']) {
-    process.on(signal, () => {
-      shutdown(server, signal, 5000);
-    });
+    process.on(signal, () => shutdown(server, signal, 5000));
   }
 
   await server.listen(port, host);

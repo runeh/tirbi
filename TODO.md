@@ -2,7 +2,6 @@
 
 Thoughts/ideas/tasks
 
-- [ ] Support readiness/liveness URLs?
 - [ ] Rename "config" to "options"? At least be consistent.
 - [ ] Make the code in addContentTypeParser more robust
 - [ ] Add some build / publish actions
@@ -14,11 +13,12 @@ Thoughts/ideas/tasks
 - [ ] Use the turborepo cli in tests with a mock repo?
 - [ ] Listen for events so we don't get 404?
 - [ ] jsdoc comments
-- [ ] Proper shutdown / signal stuff
 - [ ] Add more docs
 - [ ] Add some more tests
 - [ ] Add non-http logging?
 - [ ] Handle the "events" request?
+- [x] Proper shutdown / signal stuff
+- [x] Support readiness/liveness URLs?
 - [x] Use npx in example
 - [x] Make sure we emit types and things
 - [x] Hook up entrypoint etc in package.json
