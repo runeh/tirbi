@@ -9,18 +9,12 @@ contribute other storage backends.
 Tirbi can be used either as a stand-alone command line server, or as a fastify
 plugin.
 
-## Getting started
-
-Install tirbi:
-
-```shell
-npm install -g tirbi
-```
+## Quick start
 
 Run tirbi server:
 
 ```shell
-tirbi
+npx tirbi
 ```
 
 This starts server that allows any authentication token and stores cached data

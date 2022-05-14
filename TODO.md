@@ -2,13 +2,14 @@
 
 Thoughts/ideas/tasks
 
+- [ ] Make the code in addContentTypeParser more robust
+- [ ] Add some build / publish actions
 - [ ] Allow passing in a logger to plugin?
 - [ ] Deploy docs for things that have been tested
 - [ ] Require a flag to omit token?
 - [ ] Add contributing doc docs?
 - [ ] Update license
 - [ ] Use the turborepo cli in tests with a mock repo?
-- [ ] Use npx in example
 - [ ] Listen for events so we don't get 404?
 - [ ] jsdoc comments
 - [ ] Proper shutdown / signal stuff
@@ -16,6 +17,7 @@ Thoughts/ideas/tasks
 - [ ] Add some more tests
 - [ ] Add non-http logging?
 - [ ] Handle the "events" request?
+- [x] Use npx in example
 - [x] Make sure we emit types and things
 - [x] Hook up entrypoint etc in package.json
 - [x] Rename storageConfig in config?

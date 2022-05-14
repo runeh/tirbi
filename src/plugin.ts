@@ -36,11 +36,11 @@ const tirbiPluginCallback: FastifyPluginAsync<TirbiConfig> = async (
   instance,
   config,
 ) => {
-  // fixme: this shouldn't be necessary. Can we get typescript to insist on
-  // passing in valid args?
+  // Not been able to get the types to insist on passing in an options object,
+  // thus we warn in this case.
   if (Object.keys(config).length === 0) {
     instance.log.warn(
-      'No configuration used when registiring tirbi. Using defaults',
+      'No configuration used when registering tirbi plugin. Using defaults',
     );
     config = { tokens: [], storage: { kind: 'memory' } };
   }
@@ -73,10 +73,7 @@ const tirbiPluginCallback: FastifyPluginAsync<TirbiConfig> = async (
 
   instance.addContentTypeParser(
     'application/octet-stream',
-    (_req, payload, done) => {
-      // fixme: too naive I guess
-      done(null, payload);
-    },
+    (_, payload, done) => done(null, payload),
   );
 
   instance.put<{
