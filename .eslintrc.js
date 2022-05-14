@@ -33,9 +33,6 @@ module.exports = {
     'eol-last': ['error', 'always'],
 
     'sort-imports': ['error', { ignoreDeclarationSort: true }],
-    'import/order': [
-      'error',
-      { alphabetize: { order: 'asc' }, 'newlines-between': 'never' },
-    ],
+    'import/order': ['error'],
   },
 };
