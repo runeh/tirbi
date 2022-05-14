@@ -6,8 +6,7 @@ feature of [turborepo](https://turborepo.org). It supports storing cached assets
 on the file system, in memory, or in Google Cloud Storage bucket. Feel free to
 contribute other storage backends.
 
-Tirbi can be used either as a stand-alone command line server, or as a fastify
-plugin.
+Tirbi can be used either as a command line server, or as a fastify plugin.
 
 ## Quick start
 
@@ -40,10 +39,9 @@ The server can also be configured using environment variables:
 - `STORAGE` - Storage URI
 - `TOKEN` - An auth token
 
-## Programmatic usage
+## fastify plugin
 
-The module exports a `tirbiPlugin` object that is a fastify plugin. It can be
-used like this:
+Tirbi exports a `tirbiPlugin` object that is a fastify plugin:
 
 ```typescript
 import fastify from 'fastify';
@@ -61,15 +59,40 @@ async function main() {
 main();
 ```
 
-The module also exports the following:
-
-- `StorageConfig` - Interface describing the available storage configs.
-- `parseStorageUri` - Utility function to parse a storage URI into a
-  `StorageConfig` object
-- `TirbiConfig` - Interface describing the config options of the fastify plugin.
-
 Have a look in [`cli.ts`](./src/cli.ts) to see how the tirbi CLI starts a
 server.
+
+## Reference
+
+Interface describing the config options of the fastify plugin.
+
+### `TirbiConfig`
+
+- `tokens` - (optional) an array of allowed authorization tokens as strings. If
+  omitted, authorization tokens will not be checked.
+- `storage` - an object configuring the storage backend. See `StorageConfig`
+
+### `StorageConfig`
+
+There are TypeScript types for the supported storage backends:
+
+- `FileSystemStorageConfig` - Config for file system storage backend.
+- `MemoryStorageConfig` - Config for in-memory storage backend.
+- `GcsStorageConfig` - Config for Google Cloud Storage backend.
+- `StorageConfig` - The uinon of the backend config types.
+
+### `parseStorageUri`
+
+Parse a URI string to a `StorageConfig` object. Returns null if there if the URI
+is invalid, or uses an unknown scheme. This function will never throw an error.
+
+### `tirbiPlugin`
+
+A fastify plugin. Takes a `TirbiConfig` argument.
+
+### Storage options
+
+fixme: list of URI stuff
 
 ## Docker usage
 

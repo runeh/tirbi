@@ -2,6 +2,8 @@
 
 Thoughts/ideas/tasks
 
+- [ ] Support readiness/liveness URLs?
+- [ ] Rename "config" to "options"? At least be consistent.
 - [ ] Make the code in addContentTypeParser more robust
 - [ ] Add some build / publish actions
 - [ ] Allow passing in a logger to plugin?

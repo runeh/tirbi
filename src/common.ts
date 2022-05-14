@@ -1,7 +1,22 @@
+export interface GcsStorageConfig {
+  kind: 'gs';
+  bucket: string;
+}
+
+export interface FileSystemStorageConfig {
+  kind: 'fs';
+  path: string;
+}
+
+export interface MemoryStorageConfig {
+  kind: 'memory';
+  sizeMb?: number;
+}
+
 export type StorageConfig =
-  | { kind: 'gs'; bucket: string }
-  | { kind: 'fs'; path: string }
-  | { kind: 'memory'; sizeMb?: number };
+  | GcsStorageConfig
+  | FileSystemStorageConfig
+  | MemoryStorageConfig;
 
 /**
  * Returns the return value of a function, or null if the function threw
