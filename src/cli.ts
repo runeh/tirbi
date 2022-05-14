@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { InvalidArgumentError, Option, program } from 'commander';
-import fastify from 'fastify';
+import fastify, { FastifyInstance } from 'fastify';
 import { StorageConfig, parseStorageUri } from './common';
 import { tirbiPlugin } from './plugin';
 
@@ -86,15 +86,40 @@ interface ParseOptions {
   token?: string[];
 }
 
+function shutdown(
+  server: FastifyInstance,
+  signal: string,
+  gracePeriodMs: number,
+) {
+  server.log.info({ signal: signal }, `Received signal ${signal}`);
+  setTimeout(() => {
+    server.log.warn('Could not gracefully close server within grace period');
+    server.log.info('Exiting');
+    process.exit(0);
+  }, gracePeriodMs);
+  server.close(() => {
+    server.log.info('Exiting');
+    process.exit(0);
+  });
+}
+
 async function main() {
   program.parse();
   // Not really typesafe, but good enough
   const { token, host, storage, port }: ParseOptions = program.opts();
   const server = fastify({ logger: true });
   await server.register(tirbiPlugin, { storage, tokens: token ?? [] });
+
+  // Try to shutdown properly. If there are pending requests after 5 seconds,
+  // just shut down the process
+  for (const signal of ['SIGTERM', 'SIGINT']) {
+    process.on(signal, () => {
+      shutdown(server, signal, 5000);
+    });
+  }
+
   await server.listen(port, host);
 }
 
-main().catch((err) => {
-  console.log(err);
-});
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+main();
