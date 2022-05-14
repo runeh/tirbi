@@ -122,7 +122,6 @@ yarn lint-staged
 - [ ] Add more docs
 - [ ] Add some more tests
 - [ ] Add non-http logging?
-- [ ] Trace IDs?
 - [ ] Handle the "events" request?
 - [x] Make sure we emit types and things
 - [x] Hook up entrypoint etc in package.json
@@ -149,3 +148,4 @@ yarn lint-staged
 - [-] Use custom errors when throwing?
 - [-] Check if promises.stat always succeeds. Use that instead of also exists in
   that case
+- [-] Trace IDs?
