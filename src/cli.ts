@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { InvalidArgumentError, Option, program } from 'commander';
 import fastify from 'fastify';
 import { StorageConfig, parseStorageUri } from './common';

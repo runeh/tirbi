@@ -1,6 +1,6 @@
 {
   "name": "tirbi",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.3",
   "description": "A turborepo remote cache compatible server",
   "author": "Rune Finstad Halvorsen <rune@runefh.dev>",
   "repository": "github:runeh/tirbi",
@@ -10,7 +10,7 @@
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc -p  .",
+    "build": "tsc -p .",
     "lint": "eslint src/**",
     "prepare": "husky install",
     "test": "jest"
