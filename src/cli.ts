@@ -2,6 +2,7 @@
 
 import { InvalidArgumentError, Option, program } from 'commander';
 import fastify, { FastifyInstance } from 'fastify';
+import { version } from './version';
 import { StorageConfig, parseStorageUri } from './common';
 import { tirbiPlugin } from './plugin';
 
@@ -82,7 +83,8 @@ program
       'LIVENESS',
     ),
   )
-  .version('1.0.0-beta1', '-v, --version', 'show tirbi version')
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  .version(version, '-v, --version', 'show tirbi version')
   .addHelpText('after', exampleText);
 
 interface ParseOptions {

@@ -1,3 +1,4 @@
 jest.config.js
 .eslintrc.js
 tests/
+bin/
