@@ -2,6 +2,7 @@
 
 Thoughts/ideas/tasks
 
+- [ ] Reorg cli so it's testable?
 - [ ] Plugin should maybe support custom auth?
 - [ ] Docs for readiness
 - [ ] Rename "config" to "options"? At least be consistent.

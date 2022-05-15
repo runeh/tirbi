@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { setTimeout } from 'timers/promises';
 import { InvalidArgumentError, Option, program } from 'commander';
 import fastify, { FastifyInstance } from 'fastify';
 import { version } from './version';
@@ -10,6 +11,35 @@ const defaultHost = '0.0.0.0';
 const defaultPort = 8080;
 const defaultStorage: StorageConfig = { kind: 'memory' };
 const defaultLivenessPath = '/healthz';
+
+function closeServer(server: FastifyInstance): Promise<true> {
+  return new Promise((resolve) => server.close(() => resolve(true)));
+}
+
+async function sleep(ms: number): Promise<false> {
+  await setTimeout(ms);
+  return false;
+}
+
+async function shutdown(
+  server: FastifyInstance,
+  signal: string,
+  gracePeriodMs: number,
+) {
+  server.log.info(
+    { signal: signal, gracePeriodMs },
+    `Received signal ${signal}`,
+  );
+  const closedInGracePeriod = await Promise.race([
+    closeServer(server),
+    sleep(gracePeriodMs),
+  ]);
+  if (!closedInGracePeriod) {
+    server.log.warn('Server did not close within grace period');
+  }
+  server.log.info('Exiting');
+  process.exit(0);
+}
 
 function parsePortArg(raw: string) {
   const port = Number(raw);
@@ -95,26 +125,9 @@ interface ParseOptions {
   liveness: string;
 }
 
-function shutdown(
-  server: FastifyInstance,
-  signal: string,
-  gracePeriodMs: number,
-) {
-  server.log.info({ signal: signal }, `Received signal ${signal}`);
-  setTimeout(() => {
-    server.log.warn('Could not gracefully close server within grace period');
-    server.log.info('Exiting');
-    process.exit(0);
-  }, gracePeriodMs);
-  server.close(() => {
-    server.log.info('Exiting');
-    process.exit(0);
-  });
-}
-
 async function main() {
   program.parse();
-  // Not really typesafe, but good enough
+  // Not really type safe, but good enough
   const { token, host, storage, port, liveness }: ParseOptions = program.opts();
   const tokens = token ?? [];
   const livenessPath = liveness ?? defaultLivenessPath;
@@ -128,10 +141,14 @@ async function main() {
     reply.code(204).send();
   });
 
-  // Try to shutdown properly, with a grace period of 5 seconds for requests to
-  // finish. If there are pending requests after that,just shut down the process.
+  // If the process is interrupted, try to shutdown properly, with a grace
+  // period of 5 seconds for requests to finish. If there are pending requests
+  // after that,just shut down the process.
   for (const signal of ['SIGTERM', 'SIGINT']) {
-    process.on(signal, () => shutdown(server, signal, 5000));
+    process.on(signal, () => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      shutdown(server, signal, 5000);
+    });
   }
 
   await server.listen(port, host);
