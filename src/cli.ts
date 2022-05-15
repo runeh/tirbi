@@ -13,7 +13,7 @@ const defaultLivenessPath = '/healthz';
 
 function parsePortArg(raw: string) {
   const port = Number(raw);
-  if (isNaN(port)) {
+  if (Number.isNaN(port)) {
     throw new InvalidArgumentError('Port must be a number');
   }
 

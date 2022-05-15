@@ -2,6 +2,8 @@
 
 Thoughts/ideas/tasks
 
+- [ ] Plugin should maybe support custom auth?
+- [ ] Docs for readiness
 - [ ] Rename "config" to "options"? At least be consistent.
 - [ ] Make the code in addContentTypeParser more robust
 - [ ] Add some build / publish actions

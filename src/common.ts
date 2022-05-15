@@ -56,7 +56,7 @@ export function parseStorageUri(raw: string): StorageConfig | null {
     case 'memory:': {
       const rawSizeMb = Number(url.searchParams.get('sizeMb'));
       const sizeMb =
-        isNaN(rawSizeMb) || rawSizeMb === 0 ? undefined : rawSizeMb;
+        Number.isNaN(rawSizeMb) || rawSizeMb === 0 ? undefined : rawSizeMb;
       return sizeMb ? { kind: 'memory', sizeMb } : { kind: 'memory' };
     }
 

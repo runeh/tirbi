@@ -27,7 +27,13 @@ module.exports = {
     '@typescript-eslint/prefer-ts-expect-error': 'error',
     'import/no-default-export': 'error',
     'import/no-duplicates': 'error',
-    'no-restricted-globals': ['error', 'event', 'fdescribe'],
+    'no-restricted-globals': [
+      'error',
+      {
+        name: 'isNaN',
+        message: 'Use Number.isNaN instead.',
+      },
+    ],
     'no-return-await': 'error',
     'no-template-curly-in-string': 'error',
     'eol-last': ['error', 'always'],
