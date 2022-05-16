@@ -7,5 +7,5 @@ const pkgJson = JSON.parse(
 
 writeFileSync(
   resolve(__dirname, '..', 'src', 'version.ts'),
-  `export const version = '${pkgJson.version}'`,
+  `export const version = '${pkgJson.version}';\n`,
 );
