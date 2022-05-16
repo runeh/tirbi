@@ -64,35 +64,32 @@ server.
 
 ## Reference
 
-Interface describing the config options of the fastify plugin.
+Interface describing the options of the fastify plugin.
 
-### `TirbiConfig`
+### `TirbiOptions`
 
 - `tokens` - (optional) an array of allowed authorization tokens as strings. If
   omitted, authorization tokens will not be checked.
-- `storage` - an object configuring the storage backend. See `StorageConfig`
+- `storage` - an object configuring the storage backend. See `StorageOptions`
 
-### `StorageConfig`
+### `StorageOptions`
 
 There are TypeScript types for the supported storage backends:
 
-- `FileSystemStorageConfig` - Config for file system storage backend.
-- `MemoryStorageConfig` - Config for in-memory storage backend.
-- `GcsStorageConfig` - Config for Google Cloud Storage backend.
-- `StorageConfig` - The uinon of the backend config types.
+- `FileSystemStorageOptions` - Options for file system storage backend.
+- `MemoryStorageOptions` - Options for in-memory storage backend.
+- `GcsStorageOptions` - Options for Google Cloud Storage backend.
+- `StorageOptions` - The union of the backend option types.
 
 ### `parseStorageUri`
 
-Parse a URI string to a `StorageConfig` object. Returns null if there if the URI
-is invalid, or uses an unknown scheme. This function will never throw an error.
+Parse a URI string to a `StorageOptions` object. Returns null if there if the
+URI is invalid, or uses an unknown scheme. This function will never throw an
+error.
 
 ### `tirbiPlugin`
 
-A fastify plugin. Takes a `TirbiConfig` argument.
-
-### Storage options
-
-fixme: list of URI stuff
+A fastify plugin. Takes a `TirbiOptions` argument.
 
 ## Docker usage
 
@@ -121,6 +118,12 @@ Tirbi has been tested with turborepo versions between 1.23 and 1.28.
   request.
 
 ## Misc
+
+### Liveness probe
+
+The cli listens for requests to `/healthz`, end replies with a 204. This is
+useful if running in docker or other managed platforms that probes a service for
+its liveness status.
 
 ### Pretty logs
 

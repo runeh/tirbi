@@ -4,12 +4,12 @@ import { setTimeout } from 'timers/promises';
 import { InvalidArgumentError, Option, program } from 'commander';
 import fastify, { FastifyInstance } from 'fastify';
 import { version } from './version';
-import { StorageConfig, parseStorageUri } from './common';
+import { StorageOptions, parseStorageUri } from './common';
 import { tirbiPlugin } from './plugin';
 
 const defaultHost = '0.0.0.0';
 const defaultPort = 8080;
-const defaultStorage: StorageConfig = { kind: 'memory' };
+const defaultStorage: StorageOptions = { kind: 'memory' };
 const defaultLivenessPath = '/healthz';
 
 function closeServer(server: FastifyInstance): Promise<true> {
@@ -120,7 +120,7 @@ program
 interface ParseOptions {
   port: number;
   host: string;
-  storage: StorageConfig;
+  storage: StorageOptions;
   token?: string[];
   liveness: string;
 }

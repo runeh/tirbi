@@ -1,8 +1,8 @@
 export {
-  FileSystemStorageConfig,
-  GcsStorageConfig,
-  MemoryStorageConfig,
+  FileSystemStorageOptions,
+  GcsStorageOptions,
+  MemoryStorageOptions,
   parseStorageUri,
-  StorageConfig,
+  StorageOptions,
 } from './common';
-export { tirbiPlugin, TirbiConfig } from './plugin';
+export { tirbiPlugin, TirbiOptions } from './plugin';

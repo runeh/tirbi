@@ -1,22 +1,22 @@
-export interface GcsStorageConfig {
+export interface GcsStorageOptions {
   kind: 'gs';
   bucket: string;
 }
 
-export interface FileSystemStorageConfig {
+export interface FileSystemStorageOptions {
   kind: 'fs';
   path: string;
 }
 
-export interface MemoryStorageConfig {
+export interface MemoryStorageOptions {
   kind: 'memory';
   sizeMb?: number;
 }
 
-export type StorageConfig =
-  | GcsStorageConfig
-  | FileSystemStorageConfig
-  | MemoryStorageConfig;
+export type StorageOptions =
+  | GcsStorageOptions
+  | FileSystemStorageOptions
+  | MemoryStorageOptions;
 
 /**
  * Returns the return value of a function, or null if the function threw
@@ -34,7 +34,7 @@ function throwing<T>(fun: () => T): T | null {
  * Will never throw.
  * @param raw
  */
-export function parseStorageUri(raw: string): StorageConfig | null {
+export function parseStorageUri(raw: string): StorageOptions | null {
   const url = throwing(() => new URL(raw));
   if (!url) {
     return null;

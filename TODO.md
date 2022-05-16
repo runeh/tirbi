@@ -5,7 +5,6 @@ Thoughts/ideas/tasks
 - [ ] Reorg cli so it's testable?
 - [ ] Plugin should maybe support custom auth?
 - [ ] Docs for readiness
-- [ ] Rename "config" to "options"? At least be consistent.
 - [ ] Make the code in addContentTypeParser more robust
 - [ ] Add some build / publish actions
 - [ ] Allow passing in a logger to plugin?
@@ -20,6 +19,7 @@ Thoughts/ideas/tasks
 - [ ] Add some more tests
 - [ ] Add non-http logging?
 - [ ] Handle the "events" request?
+- [x] Rename "config" to "options"? At least be consistent.
 - [x] Proper shutdown / signal stuff
 - [x] Support readiness/liveness URLs?
 - [x] Use npx in example

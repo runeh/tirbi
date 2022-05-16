@@ -2,60 +2,64 @@ import type { IncomingMessage } from 'http';
 import bearerAuthPlugin from '@fastify/bearer-auth';
 import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
-import type { StorageConfig } from './common';
+import type { StorageOptions } from './common';
 import { fsCacheStorage, gcpCacheStorage, memoryCacheStorage } from './storage';
 
-export interface TirbiConfig {
+export interface TirbiOptions {
   tokens: string[];
-  storage: StorageConfig;
+  storage: StorageOptions;
 }
 
-function initStorage(instance: FastifyInstance, config: StorageConfig) {
-  switch (config.kind) {
+function initStorage(instance: FastifyInstance, options: StorageOptions) {
+  switch (options.kind) {
     case 'gs': {
-      instance.log.info(`Setting up GCP cache storage: ${config.bucket}`);
-      return gcpCacheStorage(config.bucket);
+      instance.log.info(`Setting up GCP cache storage: ${options.bucket}`);
+      return gcpCacheStorage(options.bucket);
     }
 
     case 'fs': {
-      instance.log.info(`Setting up file system cache storage: ${config.path}`);
-      return fsCacheStorage(config.path);
+      instance.log.info(
+        `Setting up file system cache storage: ${options.path}`,
+      );
+      return fsCacheStorage(options.path);
     }
 
     case 'memory': {
-      const mbString = config.sizeMb ? `${config.sizeMb}MB` : 'default';
+      const mbString = options.sizeMb ? `${options.sizeMb}MB` : 'default';
       instance.log.info(
         `Setting up in-memory cache storage. Max size: ${mbString}`,
       );
-      return memoryCacheStorage(config.sizeMb);
+      return memoryCacheStorage(options.sizeMb);
     }
   }
 }
 
-const tirbiPluginCallback: FastifyPluginAsync<TirbiConfig> = async (
+const tirbiPluginCallback: FastifyPluginAsync<TirbiOptions> = async (
   instance,
-  config,
+  options,
 ) => {
   // Not been able to get the types to insist on passing in an options object,
   // thus we warn in this case.
-  if (Object.keys(config).length === 0) {
+  if (Object.keys(options).length === 0) {
     instance.log.warn(
-      'No configuration used when registering tirbi plugin. Using defaults',
+      'No options used when registering tirbi plugin. Using defaults',
     );
-    config = { tokens: [], storage: { kind: 'memory' } };
+    options = { tokens: [], storage: { kind: 'memory' } };
   }
 
   instance.log.info(
-    { ...config, tokens: '[redacted]' },
+    { ...options, tokens: '[redacted]' },
     `Initializing tirbi plugin`,
   );
 
-  const storage = await initStorage(instance, config.storage);
+  const storage = await initStorage(instance, options.storage);
 
-  if (config.tokens.length) {
-    await instance.register(bearerAuthPlugin, { keys: new Set(config.tokens) });
+  if (options.tokens.length) {
+    await instance.register(bearerAuthPlugin, {
+      keys: new Set(options.tokens),
+    });
   } else {
-    instance.log.warn('tirbi configured without token authorization!');
+    instance.log.warn('tirbi started without token authorization!');
   }
 
   instance.get<{
