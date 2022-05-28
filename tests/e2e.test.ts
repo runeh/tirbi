@@ -1,10 +1,13 @@
-import tempy from 'tempy';
 import { createTestRepo } from 'test-monorepo-generator';
-import execa from 'execa';
-import hasha from 'hasha';
-import del from 'del';
-import { walkSync } from '@nodelib/fs.walk';
 import { join } from 'path';
+import { walkSync } from '@nodelib/fs.walk';
+import del from 'del';
+import execa from 'execa';
+import fastify from 'fastify';
+import hasha from 'hasha';
+import tempy from 'tempy';
+import type { FastifyInstance } from 'fastify';
+import { tirbiPlugin } from '../src';
 
 function getRepoFingerprint(pth: string) {
   const paths = walkSync(pth, {
@@ -20,11 +23,16 @@ function getRepoFingerprint(pth: string) {
       hash: hasha.fromFileSync(join(pth, e.path), { algorithm: 'md5' }),
     }))
     .sort((a, b) => a.path.localeCompare(b.path));
-
   return paths.map((e) => `${e.path.padEnd(48, ' ')} ${e.hash}`);
 }
 
 describe.each([
+  '1.2.1',
+  '1.2.2',
+  '1.2.3',
+  '1.2.4',
+  '1.2.5',
+  '1.2.6',
   '1.2.7',
   '1.2.8',
   '1.2.9',
@@ -37,6 +45,8 @@ describe.each([
   const seed = 'abcd';
   let tempDir: string;
   let fingerprint: string[];
+  let server: FastifyInstance;
+  let apiUrl: string;
 
   beforeEach(async () => {
     tempDir = tempy.directory();
@@ -57,30 +67,59 @@ describe.each([
     );
 
     fingerprint = getRepoFingerprint(tempDir);
+
+    server = fastify();
+    server.register(tirbiPlugin, {
+      storage: { kind: 'memory' },
+      tokens: ['test'],
+    });
+
+    apiUrl = await server.listen(0);
   }, 30_000);
 
   afterEach(async () => {
     await del(tempDir, { force: true });
+    await server.close();
   });
 
   it('end to end test', async () => {
-    const buildResult1 = await execa('yarn', ['turbo', 'run', 'build'], {
-      cwd: tempDir,
-      reject: true,
-    });
+    const buildResult1 = await execa(
+      'yarn',
+      [
+        'turbo',
+        'run',
+        'build',
+        '--remote-only',
+        '--team=nope',
+        '--token=test',
+        `--api=${apiUrl}`,
+      ],
+      { cwd: tempDir, reject: true },
+    );
     const updatedFingerprint1 = getRepoFingerprint(tempDir);
 
     expect(buildResult1.stdout).toContain('32 successful, 32 total');
     expect(buildResult1.stdout).toContain('0 cached, 32 total');
     expect(updatedFingerprint1).toEqual(fingerprint);
 
-    const buildResult2 = await execa('yarn', ['turbo', 'run', 'build'], {
-      cwd: tempDir,
-      reject: true,
-    });
+    const buildResult2 = await execa(
+      'yarn',
+      [
+        'turbo',
+        'run',
+        'build',
+        '--remote-only',
+        '--team=nope',
+        '--token=test',
+        `--api=${apiUrl}`,
+      ],
+      {
+        cwd: tempDir,
+        reject: true,
+      },
+    );
     const updatedFingerprint2 = getRepoFingerprint(tempDir);
-
-    expect(buildResult2.stdout).toContain('FULL TURBO');
     expect(updatedFingerprint2).toEqual(fingerprint);
+    expect(buildResult2.stdout).toContain('FULL TURBO');
   }, 30_000);
 });
