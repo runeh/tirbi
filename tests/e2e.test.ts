@@ -27,19 +27,19 @@ function getRepoFingerprint(pth: string) {
 }
 
 describe.each([
-  '1.2.1',
-  '1.2.2',
-  '1.2.3',
-  '1.2.4',
-  '1.2.5',
-  '1.2.6',
-  '1.2.7',
-  '1.2.8',
-  '1.2.9',
-  '1.2.10',
-  '1.2.11',
-  '1.2.12',
-  '1.2.13',
+  // '1.2.1',
+  // '1.2.2',
+  // '1.2.3',
+  // '1.2.4',
+  // '1.2.5',
+  // '1.2.6',
+  // '1.2.7',
+  // '1.2.8',
+  // '1.2.9',
+  // '1.2.10',
+  // '1.2.11',
+  // '1.2.12',
+  // '1.2.13',
   '1.2.14',
 ])('test turbo@%s ', (version) => {
   const seed = 'abcd';
@@ -47,9 +47,15 @@ describe.each([
   let fingerprint: string[];
   let server: FastifyInstance;
   let apiUrl: string;
+  let getOkCount: number;
+  let getNotFoundCount: number;
+  let putCount: number;
 
   beforeEach(async () => {
     tempDir = tempy.directory();
+    getOkCount = 0;
+    getNotFoundCount = 0;
+    putCount = 0;
 
     await createTestRepo({ destination: tempDir, seed, withTurbo: true });
     await execa('yarn', ['add', '-W', '-D', 'oao', `turbo@${version}`], {
@@ -72,6 +78,17 @@ describe.each([
     server.register(tirbiPlugin, {
       storage: { kind: 'memory' },
       tokens: ['test'],
+    });
+    server.addHook('onResponse', async (request, reply) => {
+      if (request.method === 'GET') {
+        if (reply.statusCode === 200) {
+          getOkCount++;
+        } else if (reply.statusCode === 404) {
+          getNotFoundCount++;
+        }
+      } else if (request.method === 'PUT') {
+        putCount++;
+      }
     });
 
     apiUrl = await server.listen(0);
@@ -101,6 +118,9 @@ describe.each([
     expect(buildResult1.stdout).toContain('32 successful, 32 total');
     expect(buildResult1.stdout).toContain('0 cached, 32 total');
     expect(updatedFingerprint1).toEqual(fingerprint);
+    expect(getOkCount).toEqual(0);
+    expect(getNotFoundCount).toEqual(32);
+    expect(putCount).toEqual(32);
 
     const buildResult2 = await execa(
       'yarn',
@@ -121,5 +141,8 @@ describe.each([
     const updatedFingerprint2 = getRepoFingerprint(tempDir);
     expect(updatedFingerprint2).toEqual(fingerprint);
     expect(buildResult2.stdout).toContain('FULL TURBO');
+    expect(getOkCount).toEqual(32);
+    expect(getNotFoundCount).toEqual(32);
+    expect(putCount).toEqual(32);
   }, 30_000);
 });
