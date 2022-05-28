@@ -27,19 +27,19 @@ function getRepoFingerprint(pth: string) {
 }
 
 describe.each([
-  // '1.2.1',
-  // '1.2.2',
-  // '1.2.3',
-  // '1.2.4',
-  // '1.2.5',
-  // '1.2.6',
-  // '1.2.7',
-  // '1.2.8',
-  // '1.2.9',
-  // '1.2.10',
-  // '1.2.11',
-  // '1.2.12',
-  // '1.2.13',
+  '1.2.1',
+  '1.2.2',
+  '1.2.3',
+  '1.2.4',
+  '1.2.5',
+  '1.2.6',
+  '1.2.7',
+  '1.2.8',
+  '1.2.9',
+  '1.2.10',
+  '1.2.11',
+  '1.2.12',
+  '1.2.13',
   '1.2.14',
 ])('test turbo@%s ', (version) => {
   const seed = 'abcd';
@@ -51,7 +51,7 @@ describe.each([
   let getNotFoundCount: number;
   let putCount: number;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     tempDir = tempy.directory();
     getOkCount = 0;
     getNotFoundCount = 0;
@@ -66,10 +66,7 @@ describe.each([
     await execa(
       'yarn',
       ['oao', 'run-script', '--tree', '--parallel', 'build'],
-      {
-        cwd: tempDir,
-        reject: true,
-      },
+      { cwd: tempDir, reject: true },
     );
 
     fingerprint = getRepoFingerprint(tempDir);
@@ -94,13 +91,13 @@ describe.each([
     apiUrl = await server.listen(0);
   }, 30_000);
 
-  afterEach(async () => {
+  afterAll(async () => {
     await del(tempDir, { force: true });
     await server.close();
   });
 
-  it('end to end test', async () => {
-    const buildResult1 = await execa(
+  it('submits data when cache is cold', async () => {
+    const buildResult = await execa(
       'yarn',
       [
         'turbo',
@@ -115,14 +112,16 @@ describe.each([
     );
     const updatedFingerprint1 = getRepoFingerprint(tempDir);
 
-    expect(buildResult1.stdout).toContain('32 successful, 32 total');
-    expect(buildResult1.stdout).toContain('0 cached, 32 total');
+    expect(buildResult.stdout).toContain('32 successful, 32 total');
+    expect(buildResult.stdout).toContain('0 cached, 32 total');
     expect(updatedFingerprint1).toEqual(fingerprint);
     expect(getOkCount).toEqual(0);
     expect(getNotFoundCount).toEqual(32);
     expect(putCount).toEqual(32);
+  });
 
-    const buildResult2 = await execa(
+  it('uses cached data when cache is warm', async () => {
+    const buildResult = await execa(
       'yarn',
       [
         'turbo',
@@ -133,14 +132,11 @@ describe.each([
         '--token=test',
         `--api=${apiUrl}`,
       ],
-      {
-        cwd: tempDir,
-        reject: true,
-      },
+      { cwd: tempDir, reject: true },
     );
     const updatedFingerprint2 = getRepoFingerprint(tempDir);
     expect(updatedFingerprint2).toEqual(fingerprint);
-    expect(buildResult2.stdout).toContain('FULL TURBO');
+    expect(buildResult.stdout).toContain('FULL TURBO');
     expect(getOkCount).toEqual(32);
     expect(getNotFoundCount).toEqual(32);
     expect(putCount).toEqual(32);
