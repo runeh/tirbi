@@ -2,7 +2,7 @@ import tempy from 'tempy';
 import { createTestRepo } from 'test-monorepo-generator';
 import execa from 'execa';
 import hasha from 'hasha';
-
+import del from 'del';
 import { walkSync } from '@nodelib/fs.walk';
 import { join } from 'path';
 
@@ -24,13 +24,23 @@ function getRepoFingerprint(pth: string) {
   return paths.map((e) => `${e.path.padEnd(48, ' ')} ${e.hash}`);
 }
 
-describe('end to end test', () => {
-  const tempDir = tempy.directory();
+describe.each([
+  '1.2.7',
+  '1.2.8',
+  '1.2.9',
+  '1.2.10',
+  '1.2.11',
+  '1.2.12',
+  '1.2.13',
+  '1.2.14',
+])('test turbo@%s ', (version) => {
   const seed = 'abcd';
+  let tempDir: string;
   let fingerprint: string[];
 
-  beforeAll(async () => {
-    const version = '1.2.1';
+  beforeEach(async () => {
+    tempDir = tempy.directory();
+
     await createTestRepo({ destination: tempDir, seed, withTurbo: true });
     await execa('yarn', ['add', '-W', '-D', 'oao', `turbo@${version}`], {
       cwd: tempDir,
@@ -47,10 +57,13 @@ describe('end to end test', () => {
     );
 
     fingerprint = getRepoFingerprint(tempDir);
-    console.log(fingerprint);
   }, 30_000);
 
-  it('bops', async () => {
+  afterEach(async () => {
+    await del(tempDir, { force: true });
+  });
+
+  it('end to end test', async () => {
     const buildResult1 = await execa('yarn', ['turbo', 'run', 'build'], {
       cwd: tempDir,
       reject: true,
