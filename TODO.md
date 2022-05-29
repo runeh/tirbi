@@ -10,12 +10,12 @@ Thoughts/ideas/tasks
 - [ ] Deploy docs for things that have been tested
 - [ ] Require a flag to omit token?
 - [ ] Add contributing doc docs?
-- [ ] Update license
 - [ ] Listen for events so we don't get 404?
 - [ ] jsdoc comments
 - [ ] Add more docs
 - [ ] Add non-http logging?
 - [ ] Handle the "events" request?
+- [x] Update license
 - [x] Add some more tests
 - [x] Use the turborepo cli in tests with a mock repo?
 - [x] Rename "config" to "options"? At least be consistent.
