@@ -26,6 +26,44 @@ function getRepoFingerprint(pth: string) {
   return paths.map((e) => `${e.path.padEnd(48, ' ')} ${e.hash}`);
 }
 
+function buildWithTurbo(apiUrl: string, tempDir: string) {
+  return execa(
+    'yarn',
+    [
+      'turbo',
+      'run',
+      'build',
+      '--remote-only',
+      '--team=nope',
+      '--token=test',
+      `--api=${apiUrl}`,
+    ],
+    { cwd: tempDir, reject: true },
+  );
+}
+
+/**
+ * These tests does the following:
+ *
+ * - Creates a monorepo
+ * - Installs oao
+ * - Installs turborepo at the given version
+ * - Builds with oao
+ * - Saves a fingerprint of the built repo
+ * - Spins up a tirbi server
+ * - Builds with turbo/tirbi
+ *   - Checks that the fingerprint is identical after building with turbo
+ *   - Checks that the expected number of requests were made to tirbi
+ *   - Checks that there was no cache in use
+ * - Builds with turbo/tirbi again
+ *   - Checks that the fingerprint is identical after building with turbo
+ *   - Checks that the expected number of requests were made to tirbi
+ *   - Checks that the cache was used
+ *
+ * These tests are NOT meant to check performance, neither for turborepo or
+ * tirbi. These tests are quite slow since they invoke yarn to install packages
+ * and so on.
+ */
 describe.each([
   '1.2.1',
   '1.2.2',
@@ -97,45 +135,22 @@ describe.each([
   });
 
   it('submits data when cache is cold', async () => {
-    const buildResult = await execa(
-      'yarn',
-      [
-        'turbo',
-        'run',
-        'build',
-        '--remote-only',
-        '--team=nope',
-        '--token=test',
-        `--api=${apiUrl}`,
-      ],
-      { cwd: tempDir, reject: true },
-    );
-    const updatedFingerprint1 = getRepoFingerprint(tempDir);
+    const buildResult = await buildWithTurbo(apiUrl, tempDir);
+    const turboFingerprint = getRepoFingerprint(tempDir);
 
     expect(buildResult.stdout).toContain('32 successful, 32 total');
     expect(buildResult.stdout).toContain('0 cached, 32 total');
-    expect(updatedFingerprint1).toEqual(fingerprint);
+    expect(turboFingerprint).toEqual(fingerprint);
     expect(getOkCount).toEqual(0);
     expect(getNotFoundCount).toEqual(32);
     expect(putCount).toEqual(32);
   });
 
   it('uses cached data when cache is warm', async () => {
-    const buildResult = await execa(
-      'yarn',
-      [
-        'turbo',
-        'run',
-        'build',
-        '--remote-only',
-        '--team=nope',
-        '--token=test',
-        `--api=${apiUrl}`,
-      ],
-      { cwd: tempDir, reject: true },
-    );
-    const updatedFingerprint2 = getRepoFingerprint(tempDir);
-    expect(updatedFingerprint2).toEqual(fingerprint);
+    const buildResult = await buildWithTurbo(apiUrl, tempDir);
+
+    const turboFingerprint = getRepoFingerprint(tempDir);
+    expect(turboFingerprint).toEqual(fingerprint);
     expect(buildResult.stdout).toContain('FULL TURBO');
     expect(getOkCount).toEqual(32);
     expect(getNotFoundCount).toEqual(32);
