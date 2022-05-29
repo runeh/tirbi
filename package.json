@@ -17,18 +17,22 @@
     "test": "jest"
   },
   "devDependencies": {
+    "@nodelib/fs.walk": "^1.2.8",
     "@tsconfig/node16": "^1.0.2",
     "@types/jest": "^27.5.1",
     "@types/lru-cache": "^7.10.10",
     "@types/node": "^16.0.0",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "@typescript-eslint/parser": "^5.25.0",
+    "del": "^6.0.0",
     "eslint": "^8.16.0",
     "eslint-plugin-import": "^2.26.0",
+    "execa": "^5.0.0",
     "husky": "^8.0.1",
     "jest": "^28.1.0",
     "lint-staged": ">=10",
     "prettier": "^2.6.2",
+    "test-monorepo-generator": "^1.0.0-beta3",
     "ts-jest": "^28.0.2",
     "typescript": "^4.6.4"
   },
@@ -40,7 +44,9 @@
     "fastify": "^3.29.0",
     "fastify-plugin": "^3.0.0",
     "get-stream": "^6.0.1",
+    "hasha": "^5.2.2",
     "lru-cache": "^7.10.1",
+    "tempy": "^1.0.0",
     "to-readable-stream": "^2.0.0",
     "ts-invariant": "^0.10.3"
   },
