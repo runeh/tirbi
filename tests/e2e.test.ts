@@ -1,16 +1,21 @@
 import { createTestRepo } from 'test-monorepo-generator';
 import { join } from 'path';
+import { tirbiPlugin } from '../src';
 import { walkSync } from '@nodelib/fs.walk';
 import del from 'del';
 import execa from 'execa';
-import fastify from 'fastify';
+import fastify, { FastifyInstance } from 'fastify';
 import hasha from 'hasha';
 import tempy from 'tempy';
-import type { FastifyInstance } from 'fastify';
-import { tirbiPlugin } from '../src';
 
+/**
+ * Walks the repo dir and returns an array of strings. Each string is the path
+ * of a file in the repo, with a hash of the contents of the file at that path.
+ *
+ * Ignores .turbo folders and node_modules folders
+ */
 function getRepoFingerprint(pth: string) {
-  const paths = walkSync(pth, {
+  return walkSync(pth, {
     basePath: '',
     deepFilter: (entry) =>
       entry.name !== 'node_modules' && entry.name !== '.turbo',
@@ -22,8 +27,8 @@ function getRepoFingerprint(pth: string) {
       path: e.path,
       hash: hasha.fromFileSync(join(pth, e.path), { algorithm: 'md5' }),
     }))
-    .sort((a, b) => a.path.localeCompare(b.path));
-  return paths.map((e) => `${e.path.padEnd(48, ' ')} ${e.hash}`);
+    .sort((a, b) => a.path.localeCompare(b.path))
+    .map((e) => `${e.path.padEnd(48, ' ')} ${e.hash}`);
 }
 
 function buildWithTurbo(apiUrl: string, tempDir: string) {
@@ -33,6 +38,7 @@ function buildWithTurbo(apiUrl: string, tempDir: string) {
       'turbo',
       'run',
       'build',
+      '--no-color',
       '--remote-only',
       '--team=nope',
       '--token=test',
@@ -148,8 +154,8 @@ describe.each([
 
   it('uses cached data when cache is warm', async () => {
     const buildResult = await buildWithTurbo(apiUrl, tempDir);
-
     const turboFingerprint = getRepoFingerprint(tempDir);
+
     expect(turboFingerprint).toEqual(fingerprint);
     expect(buildResult.stdout).toContain('FULL TURBO');
     expect(getOkCount).toEqual(32);
