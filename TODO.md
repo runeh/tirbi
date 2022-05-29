@@ -2,7 +2,6 @@
 
 Thoughts/ideas/tasks
 
-- [ ] Reorg cli so it's testable?
 - [ ] Plugin should maybe support custom auth?
 - [ ] Docs for readiness
 - [ ] Make the code in addContentTypeParser more robust
@@ -12,13 +11,13 @@ Thoughts/ideas/tasks
 - [ ] Require a flag to omit token?
 - [ ] Add contributing doc docs?
 - [ ] Update license
-- [ ] Use the turborepo cli in tests with a mock repo?
 - [ ] Listen for events so we don't get 404?
 - [ ] jsdoc comments
 - [ ] Add more docs
-- [ ] Add some more tests
 - [ ] Add non-http logging?
 - [ ] Handle the "events" request?
+- [x] Add some more tests
+- [x] Use the turborepo cli in tests with a mock repo?
 - [x] Rename "config" to "options"? At least be consistent.
 - [x] Proper shutdown / signal stuff
 - [x] Support readiness/liveness URLs?
@@ -49,3 +48,4 @@ Thoughts/ideas/tasks
 - [-] Check if promises.stat always succeeds. Use that instead of also exists in
   that case
 - [-] Trace IDs?
+- [-] Reorg cli so it's testable?
