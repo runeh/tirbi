@@ -45,7 +45,7 @@ export function parseStorageUri(raw: string): StorageOptions | null {
       return { kind: 'gs', bucket: `${url.host}${url.pathname}` };
     }
 
-    case 'file:': {
+    case 'fs:': {
       if (url.host !== '') {
         return null;
       }
