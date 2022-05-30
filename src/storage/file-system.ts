@@ -29,8 +29,7 @@ export async function fsCacheStorage(rawRoot: string): Promise<CacheStorage> {
   }
 
   await unlink(testPath);
-
-  if (!existsSync(testPath)) {
+  if (existsSync(testPath)) {
     throw new Error(`Test file could not be deleted: "${root}"`);
   }
 

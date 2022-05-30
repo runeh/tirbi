@@ -53,10 +53,12 @@ function parsePortArg(raw: string) {
   return port;
 }
 
-function parseStorageArg(raw: string) {
+function parseStorageArg(raw: string): StorageOptions {
   const parsed = parseStorageUri(raw);
   if (!parsed) {
     throw new InvalidArgumentError('Invalid storage URI');
+  } else {
+    return parsed;
   }
 }
 
