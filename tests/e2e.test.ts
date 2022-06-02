@@ -85,6 +85,7 @@ describe.each([
   '1.2.12',
   '1.2.13',
   '1.2.14',
+  '1.2.15',
 ])('test turbo@%s ', (version) => {
   const seed = 'abcd';
   let tempDir: string;
