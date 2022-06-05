@@ -13,10 +13,17 @@ export interface MemoryStorageOptions {
   sizeMb?: number;
 }
 
+export interface S3StorageOptions {
+  kind: 's3';
+  bucket: string;
+  region?: string;
+}
+
 export type StorageOptions =
   | GcsStorageOptions
   | FileSystemStorageOptions
-  | MemoryStorageOptions;
+  | MemoryStorageOptions
+  | S3StorageOptions;
 
 /**
  * Returns the return value of a function, or null if the function threw
@@ -58,6 +65,17 @@ export function parseStorageUri(raw: string): StorageOptions | null {
       const sizeMb =
         Number.isNaN(rawSizeMb) || rawSizeMb === 0 ? undefined : rawSizeMb;
       return sizeMb ? { kind: 'memory', sizeMb } : { kind: 'memory' };
+    }
+
+    case 's3:': {
+      const ret: S3StorageOptions = { kind: 's3', bucket: url.hostname };
+
+      const region = url.searchParams.get('region') ?? undefined;
+      if (region) {
+        ret.region = region;
+      }
+
+      return ret;
     }
 
     default: {

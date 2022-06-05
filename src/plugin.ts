@@ -4,6 +4,7 @@ import type { FastifyInstance, FastifyPluginAsync } from 'fastify';
 import fp from 'fastify-plugin';
 import type { StorageOptions } from './common';
 import { fsCacheStorage, gcpCacheStorage, memoryCacheStorage } from './storage';
+import { s3CacheStorage } from './storage/s3';
 
 export interface TirbiOptions {
   tokens: string[];
@@ -30,6 +31,10 @@ function initStorage(instance: FastifyInstance, options: StorageOptions) {
         `Setting up in-memory cache storage. Max size: ${mbString}`,
       );
       return memoryCacheStorage(options.sizeMb);
+    }
+
+    case 's3': {
+      return s3CacheStorage({ bucket: options.bucket });
     }
   }
 }
