@@ -6,7 +6,7 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import invariant from 'ts-invariant';
-import type { CacheStorage } from './types';
+import type { BinaryData, CacheStorage } from './types';
 
 interface CommandOpts {
   client: S3Client;
@@ -32,16 +32,28 @@ async function writeCacheObject(opts: CommandOpts, stream: Readable | Buffer) {
   await client.send(command);
 }
 
-async function readCacheObject(opts: CommandOpts) {
+async function readCacheObject(opts: CommandOpts): Promise<BinaryData> {
   const { bucket, client, key } = opts;
   const command = new GetObjectCommand({ Bucket: bucket, Key: key });
 
-  const res = await client.send(command);
-  invariant(res.Body, 'Missing body');
-  return res.Body;
+  const { Body: body } = await client.send(command);
+  invariant(body, 'Missing body');
+  invariant(
+    !(body instanceof ReadableStream),
+    'ReadableStream not supported as return value from s3 yet',
+  );
+
+  if (body instanceof Blob) {
+    const arrayBuffer = await body.arrayBuffer();
+    return Buffer.from(new Uint8Array(arrayBuffer));
+  }
+
+  return body;
 }
 
-async function s3CacheStorage(opts: { bucket: string }): Promise<CacheStorage> {
+export function s3CacheStorage(opts: { bucket: string }): CacheStorage {
+  // fixme: add code to verify that the bucket can be read and written to.
+  // fixme: add code to deal with region and other settings.
   const client = new S3Client({});
 
   const baseOpts: Omit<CommandOpts, 'key'> = {
@@ -59,7 +71,7 @@ async function s3CacheStorage(opts: { bucket: string }): Promise<CacheStorage> {
     },
 
     write: async (key, data) => {
-      const res = await writeCacheObject({ ...baseOpts, key }, data);
+      await writeCacheObject({ ...baseOpts, key }, data);
     },
   };
 }
