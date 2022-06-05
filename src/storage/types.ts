@@ -1,7 +1,9 @@
 import type { Readable } from 'stream';
 
+export type BinaryData = Readable | Buffer;
+
 export interface CacheStorage {
   exists(filename: string): Promise<boolean>;
-  read(filename: string): (Readable | Buffer) | Promise<Readable | Buffer>;
-  write(filename: string, body: Readable | Buffer): Promise<void>;
+  read(filename: string): BinaryData | Promise<BinaryData>;
+  write(filename: string, body: BinaryData): Promise<void>;
 }
