@@ -50,6 +50,7 @@
     "fastify-plugin": "^3.0.0",
     "get-stream": "^6.0.1",
     "hasha": "^5.2.2",
+    "is-stream": "^2.0.0",
     "lru-cache": "^7.10.1",
     "tempy": "^1.0.0",
     "to-readable-stream": "^2.0.0",

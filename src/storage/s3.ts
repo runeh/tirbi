@@ -7,6 +7,7 @@ import {
 } from '@aws-sdk/client-s3';
 import invariant from 'ts-invariant';
 import getStream from 'get-stream';
+import isStream from 'is-stream';
 import type { BinaryData, CacheStorage } from './types';
 
 interface CommandOpts {
@@ -57,17 +58,15 @@ async function readCacheObject(opts: CommandOpts): Promise<BinaryData> {
 
   const { Body: body } = await client.send(command);
   invariant(body, 'Missing body');
-  invariant(
-    !(body instanceof ReadableStream),
-    'ReadableStream not supported as return value from s3 yet',
-  );
 
   if (body instanceof Blob) {
     const arrayBuffer = await body.arrayBuffer();
     return Buffer.from(new Uint8Array(arrayBuffer));
+  } else if (isStream(body)) {
+    return body;
   }
 
-  return body;
+  throw new Error('dont supprt ReadableStream yet');
 }
 
 export function s3CacheStorage(opts: {
