@@ -6,6 +6,7 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import invariant from 'ts-invariant';
+import getStream from 'get-stream';
 import type { BinaryData, CacheStorage } from './types';
 
 interface CommandOpts {
@@ -19,22 +20,33 @@ async function checkIfExistsCacheObject(opts: CommandOpts) {
   const command = new HeadObjectCommand({ Bucket: bucket, Key: key });
 
   try {
-    const res = await client.send(command);
-    console.log('got res in exists', res.$metadata);
+    // fixme: do real stuff here
+    await client.send(command);
     return true;
   } catch (error) {
-    console.log('got error in exists', error);
     return false;
   }
 }
 
 async function writeCacheObject(opts: CommandOpts, stream: Readable | Buffer) {
   const { bucket, client, key } = opts;
-  const command = new PutObjectCommand({
-    Bucket: bucket,
-    Key: key,
-    Body: stream,
-  });
+
+  let command: PutObjectCommand;
+
+  if (Buffer.isBuffer(stream)) {
+    command = new PutObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      Body: stream,
+    });
+  } else {
+    const buf = await getStream.buffer(stream);
+    command = new PutObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      Body: buf,
+    });
+  }
 
   await client.send(command);
 }
@@ -67,7 +79,6 @@ export function s3CacheStorage(opts: { bucket: string }): CacheStorage {
 
   return {
     exists: async (key) => {
-      console.log('calling checkifexists');
       return checkIfExistsCacheObject({ ...baseOpts, key });
     },
 
