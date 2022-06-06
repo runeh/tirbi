@@ -70,11 +70,14 @@ async function readCacheObject(opts: CommandOpts): Promise<BinaryData> {
   return body;
 }
 
-export function s3CacheStorage(opts: { bucket: string }): CacheStorage {
+export function s3CacheStorage(opts: {
+  bucket: string;
+  region?: string;
+}): CacheStorage {
   // fixme: add code to verify that the bucket can be read and written to.
   // fixme: add code to deal with region and other settings.
   const { bucket } = opts;
-  const client = new S3Client({});
+  const client = new S3Client({ region: opts.region });
   const baseOpts: Omit<CommandOpts, 'key'> = { bucket, client };
 
   return {

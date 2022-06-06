@@ -34,7 +34,14 @@ function initStorage(instance: FastifyInstance, options: StorageOptions) {
     }
 
     case 's3': {
-      return s3CacheStorage({ bucket: options.bucket });
+      const { bucket, region } = options;
+      instance.log.info(
+        `Setting up s3 cache storage. Bucket ${bucket}. Region ${
+          region ?? 'not set'
+        }`,
+      );
+
+      return s3CacheStorage({ bucket: bucket, region: region });
     }
   }
 }
