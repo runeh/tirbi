@@ -17,8 +17,15 @@ interface CommandOpts {
 async function checkIfExistsCacheObject(opts: CommandOpts) {
   const { bucket, client, key } = opts;
   const command = new HeadObjectCommand({ Bucket: bucket, Key: key });
-  const res = await client.send(command);
-  return res.$metadata.httpStatusCode === 204;
+
+  try {
+    const res = await client.send(command);
+    console.log('got res in exists', res.$metadata);
+    return true;
+  } catch (error) {
+    console.log('got error in exists', error);
+    return false;
+  }
 }
 
 async function writeCacheObject(opts: CommandOpts, stream: Readable | Buffer) {
@@ -60,6 +67,7 @@ export function s3CacheStorage(opts: { bucket: string }): CacheStorage {
 
   return {
     exists: async (key) => {
+      console.log('calling checkifexists');
       return checkIfExistsCacheObject({ ...baseOpts, key });
     },
 
