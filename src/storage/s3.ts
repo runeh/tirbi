@@ -59,14 +59,11 @@ async function readCacheObject(opts: CommandOpts): Promise<BinaryData> {
   const { Body: body } = await client.send(command);
   invariant(body, 'Missing body');
 
-  if (body instanceof Blob) {
-    const arrayBuffer = await body.arrayBuffer();
-    return Buffer.from(new Uint8Array(arrayBuffer));
-  } else if (isStream(body)) {
+  if (isStream(body)) {
     return body;
   }
 
-  throw new Error('dont supprt ReadableStream yet');
+  throw new Error('dont support ReadableStream or Blob yet');
 }
 
 export function s3CacheStorage(opts: {
