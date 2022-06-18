@@ -135,3 +135,17 @@ tirbi | pino-pretty
 ```
 
 yarn lint-staged
+
+## Publishing
+
+Uses
+[`standard-version`](https://github.com/conventional-changelog/standard-version).
+
+Can be invoked with `yarn release`.
+
+- `yarn release --release-as major`
+- `yarn release --release-as minor`
+- `yarn release --release-as patch`
+- `yarn release --prerelease`
+
+After this runs, push in and run `npm publish`.

@@ -14,9 +14,12 @@
     "build": "tsc -p .",
     "lint": "eslint src/**",
     "prepare": "husky install",
-    "test": "jest"
+    "test": "jest",
+    "release": "standard-version"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.0.2",
+    "@commitlint/config-conventional": "^17.0.2",
     "@nodelib/fs.walk": "^1.2.8",
     "@tsconfig/node16": "^1.0.2",
     "@types/jest": "^27.5.1",
@@ -32,6 +35,7 @@
     "jest": "^28.1.0",
     "lint-staged": ">=10",
     "prettier": "^2.6.2",
+    "standard-version": "^9.5.0",
     "test-monorepo-generator": "^1.0.0-beta3",
     "ts-jest": "^28.0.2",
     "typescript": "^4.6.4"
@@ -53,5 +57,10 @@
   "lint-staged": {
     "*.{js,ts}": "eslint --cache --fix",
     "*.{js,ts,css,md,json}": "prettier --write"
+  },
+  "standard-version": {
+    "scripts": {
+      "prerelease": "yarn run build && yarn run test"
+    }
   }
 }
