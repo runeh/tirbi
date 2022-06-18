@@ -10,7 +10,6 @@
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
   "scripts": {
-    "prebuild": "node bin/write-version.js",
     "build": "tsc -p .",
     "lint": "eslint src/**",
     "prepare": "husky install",
