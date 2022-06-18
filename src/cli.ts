@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
 import { setTimeout } from 'timers/promises';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 import { InvalidArgumentError, Option, program } from 'commander';
 import fastify, { FastifyInstance } from 'fastify';
-import { version } from './version';
 import { StorageOptions, parseStorageUri } from './common';
 import { tirbiPlugin } from './plugin';
 
@@ -11,6 +12,13 @@ const defaultHost = '0.0.0.0';
 const defaultPort = 8080;
 const defaultStorage: StorageOptions = { kind: 'memory' };
 const defaultLivenessPath = '/healthz';
+const version = readVersion();
+
+function readVersion() {
+  const raw = readFileSync(resolve(__dirname, '..', 'package.json'), 'utf-8');
+  const parsed = JSON.parse(raw) as { version: string };
+  return parsed.version;
+}
 
 function closeServer(server: FastifyInstance): Promise<true> {
   return new Promise((resolve) => server.close(() => resolve(true)));
