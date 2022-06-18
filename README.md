@@ -148,4 +148,8 @@ Can be invoked with `yarn release`.
 - `yarn release --release-as patch`
 - `yarn release --prerelease`
 
-After this runs, push in and run `npm publish`.
+After this is done, use the following:
+
+```sh
+git push --follow-tags origin main && npm publish --tag prerelease
+```
