@@ -14,7 +14,8 @@
     "build": "tsc -p .",
     "lint": "eslint src/**",
     "prepare": "husky install",
-    "test": "jest"
+    "test": "jest --testPathIgnorePatterns=e2e.test.ts",
+    "test-all": "jest"
   },
   "devDependencies": {
     "@nodelib/fs.walk": "^1.2.8",
