@@ -3,8 +3,8 @@
 Tirbi is a remote cache implementation that is compatible with the
 [remote caching](https://turborepo.org/docs/core-concepts/remote-caching)
 feature of [turborepo](https://turborepo.org). It supports storing cached assets
-on the file system, in memory, or in Google Cloud Storage bucket. Feel free to
-contribute other storage backends.
+on the file system, in memory, in a Google Cloud Storage bucket or and AWS S3
+bucket. Feel free to contribute other storage backends.
 
 Tirbi can be used either as a command line server, or as a fastify plugin.
 
@@ -79,6 +79,7 @@ There are TypeScript types for the supported storage backends:
 - `FileSystemStorageOptions` - Options for file system storage backend.
 - `MemoryStorageOptions` - Options for in-memory storage backend.
 - `GcsStorageOptions` - Options for Google Cloud Storage backend.
+- `S3StorageOptions` - Options for AWS S3 storage backend.
 - `StorageOptions` - The union of the backend option types.
 
 ### `parseStorageUri`
