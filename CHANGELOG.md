@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. See
 [standard-version](https://github.com/conventional-changelog/standard-version)
 for commit guidelines.
 
+## [1.0.0](https://github.com/runeh/tirbi/compare/v1.0.0-beta.9...v1.0.0) (2022-06-19)
+
 ## 1.0.0-beta.9 (2022-06-18)
 
 ### Features
