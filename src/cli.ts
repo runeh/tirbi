@@ -87,6 +87,7 @@ The following storage URI formats are allowed:
 
 - gs://bucket-name/folder - a Google cloud storage bucket with optional folder.
 - fs:/tmp/assets - the '/tmp/assets' folder on the local disk
+- s3://foo?region=us-west-1 an AWS S3 bucket named foo in region us-west-1
 - memory:// - in-memory storage.
 - memory://?sizeMb=256 - in-memory storage with a max storage size
 
