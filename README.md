@@ -105,7 +105,7 @@ Use environment variables the control the settings of the server.
 
 ## Compatibility
 
-Tirbi has been tested with turborepo versions between 1.2.1 and 1.2.15.
+Tirbi has been tested with turborepo versions 1.2.1-1.2.16 and 1.3.0-1.3.1
 
 ## Caveats
 
