@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file. See
 [standard-version](https://github.com/conventional-changelog/standard-version)
 for commit guidelines.
 
+### [1.0.1](https://github.com/runeh/tirbi/compare/v1.0.0...v1.0.1) (2022-06-28)
+
+### Bug Fixes
+
+- fix bug with gs URL parser
+  ([9319658](https://github.com/runeh/tirbi/commit/9319658048e87aac87c5994775f521a86ca882e9))
+
 ## [1.0.0](https://github.com/runeh/tirbi/compare/v1.0.0-beta.9...v1.0.0) (2022-06-19)
 
 ## 1.0.0-beta.9 (2022-06-18)
