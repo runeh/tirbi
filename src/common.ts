@@ -41,7 +41,7 @@ export function parseStorageUri(raw: string): StorageOptions | null {
   }
 
   switch (url.protocol) {
-    case 'gs': {
+    case 'gs:': {
       return { kind: 'gs', bucket: `${url.host}${url.pathname}` };
     }
 
